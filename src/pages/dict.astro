@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { terms, getSegment } from '../lib/data';
+import { terms, getSegment, base } from '../lib/data';
 ---
 
 <Base title="名相詞典" current="dict">
@@ -18,7 +18,7 @@ import { terms, getSegment } from '../lib/data';
         {t.refs.map((r, i) => (
           <>
             {i > 0 && '、'}
-            <a href={`/read/${r}`}>{getSegment(r)?.title ?? r}</a>
+            <a href={`${base}/read/${r}`}>{getSegment(r)?.title ?? r}</a>
           </>
         ))}
       </p>

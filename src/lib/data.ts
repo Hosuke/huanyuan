@@ -92,3 +92,6 @@ export function shortTitle(seg: Segment): string {
 }
 
 export const READ_STORAGE_KEY = 'wjhy-read';
+
+/** 站点 base 路径（GitHub Pages 项目页为 /huanyuan/），拼接站内链接用 */
+export const base = import.meta.env.BASE_URL.replace(/\/$/, '');

@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import SegmentText from '../../components/SegmentText.astro';
 import ReadToggle from '../../components/ReadToggle.astro';
-import { data, segments, formatLb, type Segment } from '../../lib/data';
+import { data, segments, formatLb, base, type Segment } from '../../lib/data';
 
 export function getStaticPaths() {
   return segments.map((seg, i) => ({
@@ -75,11 +75,11 @@ const commentaries = [
 
   <nav class="read-nav">
     <span>
-      {prev && <a href={`/read/${prev.id}`}>← {prev.title}</a>}
+      {prev && <a href={`${base}/read/${prev.id}`}>← {prev.title}</a>}
     </span>
-    <a href="/">返回總綱</a>
+    <a href={base}>返回總綱</a>
     <span>
-      {next && <a href={`/read/${next.id}`}>{next.title} →</a>}
+      {next && <a href={`${base}/read/${next.id}`}>{next.title} →</a>}
     </span>
   </nav>
 </Base>

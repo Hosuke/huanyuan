@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { base } from '../lib/data';
 
 interface Props {
   title: string;
@@ -22,11 +23,11 @@ const fullTitle = `${title}｜修華嚴奧旨妄盡還源觀`;
   <body>
     <header class="site-header">
       <div class="container">
-        <a class="site-title" href="/">妄盡還源觀</a>
+        <a class="site-title" href={base}>妄盡還源觀</a>
         <nav class="site-nav">
-          <a href="/" aria-current={current === 'home' ? 'page' : undefined}>總綱</a>
-          <a href="/dict" aria-current={current === 'dict' ? 'page' : undefined}>名相</a>
-          <a href="/about" aria-current={current === 'about' ? 'page' : undefined}>說明</a>
+          <a href={base} aria-current={current === 'home' ? 'page' : undefined}>總綱</a>
+          <a href={`${base}/dict`} aria-current={current === 'dict' ? 'page' : undefined}>名相</a>
+          <a href={`${base}/about`} aria-current={current === 'about' ? 'page' : undefined}>說明</a>
         </nav>
       </div>
     </header>
@@ -38,7 +39,7 @@ const fullTitle = `${title}｜修華嚴奧旨妄盡還源觀`;
     <footer class="site-footer">
       <div class="container">
         原文出處：CBETA 電子佛典 T45n1876（公版古籍）｜本站為學習用非商業專案｜
-        <a href="/about">版權與授權說明</a>
+        <a href={`${base}/about`}>版權與授權說明</a>
       </div>
     </footer>
   </body>
