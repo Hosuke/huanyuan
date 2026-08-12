@@ -1,0 +1,539 @@
+{
+ "meta": {
+  "note": "status=pending 者，具體經品卷次待考據回填。"
+ },
+ "quotes": [
+  {
+   "id": "q01",
+   "segment": "1.0",
+   "cited_as": "起信論",
+   "work": "大乘起信論",
+   "quote": "真如自體，「有大智慧光明義故，遍照法界義故，真實識知義故，自性清淨心義故……」廣說如彼，故曰自性清淨圓明體也",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q02",
+   "segment": "2.1",
+   "cited_as": "起信論",
+   "work": "大乘起信論",
+   "quote": "無量功德藏，法性真如海",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q03",
+   "segment": "2.1",
+   "cited_as": "經",
+   "work": "（指《華嚴經》，依上下文待考）",
+   "quote": "森羅及萬象，一法之所印",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q04",
+   "segment": "2.1",
+   "cited_as": "華嚴經",
+   "work": "華嚴經",
+   "quote": "或現童男童女形，天龍及以阿脩羅，乃至摩睺羅伽等，隨其所樂悉令見。眾生形相各不同，行業音聲亦無量，如是一切皆能現，海印三昧威神力",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q05",
+   "segment": "2.2",
+   "cited_as": "華嚴經",
+   "work": "華嚴經",
+   "quote": "嚴淨不可思議剎，供養一切諸如來，放大光明無有邊，度脫眾生亦無限，施戒忍進及禪定，智慧方便神通等。如是一切皆自在，以佛華嚴三昧力",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q06",
+   "segment": "3.1",
+   "cited_as": "經",
+   "work": "（指《華嚴經》，依上下文待考）",
+   "quote": "華藏世界所有塵，一一塵中見法界，寶光現佛如雲集，此是如來剎自在",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q07",
+   "segment": "3.2",
+   "cited_as": "起信論",
+   "work": "大乘起信論",
+   "quote": "真如者，自體有常樂我淨義故，清涼不變自在義故，具足如是過恒沙功德，乃至無有所少義故",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q08",
+   "segment": "3.2",
+   "cited_as": "經",
+   "work": "（指《華嚴經》，依上下文待考）",
+   "quote": "如此華藏世界海中，無問若山若河乃至樹林塵毛等處，一一無不皆是稱真如法界具無邊德",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q09",
+   "segment": "3.2",
+   "cited_as": "經",
+   "work": "（指《華嚴經》，依上下文待考）",
+   "quote": "一切法門無盡海，同會一法道場中，如是法性佛所說，智眼能明此方便",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q10",
+   "segment": "3.2",
+   "cited_as": "經",
+   "work": "（指《華嚴經》，依上下文待考）",
+   "quote": "一切法門無盡海，一言演說盡無餘",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q11",
+   "segment": "3.3",
+   "cited_as": "寶性論",
+   "work": "究竟一乘寶性論",
+   "quote": "道前菩薩於此真空妙有猶有三疑：一者、疑空滅色，取斷滅空；二者、疑空異色，取色外空；三者、疑空是物，取空為有",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q12",
+   "segment": "3.3",
+   "cited_as": "經",
+   "work": "（指《華嚴經》，依上下文待考）",
+   "quote": "如有大經卷，量等三千界，在於一塵內，一切塵亦然。有一聰慧人，淨眼普明見，破塵出經卷，廣饒益眾生",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q13",
+   "segment": "4.1",
+   "cited_as": "維摩經",
+   "work": "維摩詰所說經",
+   "quote": "",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q14",
+   "segment": "4.2",
+   "cited_as": "瑜伽論",
+   "work": "瑜伽師地論",
+   "quote": "非大沈非小浮，常住於正念，根本眷屬，淨修梵行",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q15",
+   "segment": "4.2",
+   "cited_as": "華嚴經",
+   "work": "華嚴經",
+   "quote": "戒是無上菩提本，應當具足持淨戒",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q16",
+   "segment": "4.2",
+   "cited_as": "梵網經",
+   "work": "梵網經",
+   "quote": "微塵菩薩眾，由是成正覺",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q17",
+   "segment": "4.2",
+   "cited_as": "起信論",
+   "work": "大乘起信論",
+   "quote": "以知法性體無毀禁，是故隨順法性行尸波羅蜜，所謂不殺、不盜、不淫、不妄語，遠離貪瞋、欺詐、諂曲、邪見；亦應遠離憒閙，少欲知足，乃至小罪心生大怖，不得輕於如來所制禁",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q18",
+   "segment": "4.2",
+   "cited_as": "經",
+   "work": "（指《華嚴經》，依上下文待考）",
+   "quote": "『尸羅不清淨，三昧不現前",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q19",
+   "segment": "4.2",
+   "cited_as": "四分律",
+   "work": "四分律",
+   "quote": "第一持戒不毀犯，比丘威儀自端嚴，怨家之人不能近，若不如法即被訶",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q20",
+   "segment": "4.4",
+   "cited_as": "華嚴經",
+   "work": "華嚴經",
+   "quote": "廣大悲雲遍一切，捨身無量等剎塵，以昔劫海修行力，今此世界無諸垢",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q21",
+   "segment": "4.4",
+   "cited_as": "雜集論",
+   "work": "大乘阿毘達磨雜集論",
+   "quote": "於不堅堅覺，深住於顛倒，離煩惱所惱，得最上菩提",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q22",
+   "segment": "5.0",
+   "cited_as": "華嚴經",
+   "work": "華嚴經",
+   "quote": "如來深境界，其量等虛空，一切眾生入，而實無所入",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q23",
+   "segment": "5.0",
+   "cited_as": "入佛境界經",
+   "work": "入佛境界經",
+   "quote": "入諸無相定，見諸法寂靜。常入平等故，敬禮無所觀",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q24",
+   "segment": "5.0",
+   "cited_as": "起信論",
+   "work": "大乘起信論",
+   "quote": "若有眾生，能觀無念者",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q25",
+   "segment": "5.1",
+   "cited_as": "維摩經",
+   "work": "維摩詰所說經",
+   "quote": "法不屬因，不在緣故",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q26",
+   "segment": "5.3",
+   "cited_as": "經",
+   "work": "（指《華嚴經》，依上下文待考）",
+   "quote": "從無住本立一切法",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q27",
+   "segment": "5.4",
+   "cited_as": "華嚴經",
+   "work": "華嚴經",
+   "quote": "譬如轉輪王，成就勝七寶，來處不可得，業性亦如是",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q28",
+   "segment": "6.0",
+   "cited_as": "起信",
+   "work": "大乘起信論",
+   "quote": "『若修止者，對治凡夫住著世間，能捨二乘怯弱之見；若修觀者，對治二乘不起大悲狹劣之過，遠離凡夫不修善根",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q29",
+   "segment": "6.0",
+   "cited_as": "華嚴",
+   "work": "華嚴經",
+   "quote": "譬如金翅鳥，以左右兩翅鼓揚海水令其兩闢，觀諸龍眾命將盡者而搏取之",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q30",
+   "segment": "6.0",
+   "cited_as": "起信論",
+   "work": "大乘起信論",
+   "quote": "『若修止者，住於靜處，端坐正意",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q31",
+   "segment": "6.0",
+   "cited_as": "起信論",
+   "work": "大乘起信論",
+   "quote": "也",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q32",
+   "segment": "6.1",
+   "cited_as": "論",
+   "work": "（依上下文，待考）",
+   "quote": "由依唯識故，境本無體故，真空義成；以塵無有故，本識即不生",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q33",
+   "segment": "6.1",
+   "cited_as": "經",
+   "work": "（指《華嚴經》，依上下文待考）",
+   "quote": "未達境唯心，起種種分別，達境唯心已，分別即不生；知諸法唯心，便捨外塵相，由此息分別，悟平等真空；如世有醫王，以妙藥救病，諸佛亦如是，為物說唯心",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q34",
+   "segment": "6.3",
+   "cited_as": "經",
+   "work": "（指《華嚴經》，依上下文待考）",
+   "quote": "一毛孔中無量剎，各有四洲四大海，須彌鐵圍亦復然，悉現其中無迫隘",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q35",
+   "segment": "6.3",
+   "cited_as": "經",
+   "work": "（指《華嚴經》，依上下文待考）",
+   "quote": "華藏世界所有塵，一一塵中佛皆入，普為眾生起神變，毘盧遮那法如是",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q36",
+   "segment": "6.3",
+   "cited_as": "玄談疏",
+   "work": "華嚴經疏玄談（澄觀）",
+   "quote": "",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q37",
+   "segment": "6.5",
+   "cited_as": "經",
+   "work": "（指《華嚴經》，依上下文待考）",
+   "quote": "或以自身作眾生身、國土身、業報身、聲聞身、緣覺身、菩薩身、如來身、智身、法身、虛空身；如是十身，隨舉一身攝餘九身",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  },
+  {
+   "id": "q38",
+   "segment": "6.5",
+   "cited_as": "經",
+   "work": "（指《華嚴經》，依上下文待考）",
+   "quote": "或以多身作一身，或以一身作多身；或以一身入多身，或以多身入一身；非一身沒多身生，非多身沒一身生",
+   "identified": {
+    "canon": "",
+    "juan": "",
+    "pin": "",
+    "cbeta_ref": ""
+   },
+   "status": "pending"
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+---
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+---
+
+<button class="btn-read" data-read-toggle aria-pressed="false">標記已讀</button>
+
+<script define:vars={{ id }}>
+  const KEY = 'wjhy-read';
+  const btn = document.querySelector('[data-read-toggle]');
+
+  function load() {
+    try {
+      const v = JSON.parse(localStorage.getItem(KEY) ?? '[]');
+      return Array.isArray(v) ? v : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function render() {
+    const done = load().includes(id);
+    btn.setAttribute('aria-pressed', String(done));
+    btn.textContent = done ? '已讀 ✓' : '標記已讀';
+  }
+
+  btn.addEventListener('click', () => {
+    const list = load();
+    const i = list.indexOf(id);
+    if (i >= 0) list.splice(i, 1);
+    else list.push(id);
+    localStorage.setItem(KEY, JSON.stringify(list));
+    render();
+  });
+
+  render();
+</script>

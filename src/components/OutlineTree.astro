@@ -1,0 +1,114 @@
+---
+import { segments, shortTitle } from '../lib/data';
+
+/**
+ * 總綱圖：一體 → 二用 → 三遍 → 四德 → 五止 → 六觀
+ * 主圖只畫六門本段（5.0 總釋、6.0 問答、6.7 結會等作為側欄連結置於圖下）。
+ */
+
+interface TreeNode {
+  id: string;
+  label: string;
+  x: number;
+  y: number;
+  w: number;
+  edge: { x1: number; y1: number; x2: number; y2: number };
+}
+
+const W = 1160;
+const NODE_H = 56;
+const ROW_H = 118;
+const TOP = 34;
+const GAP = 20;
+const CX = W / 2;
+
+const rows: { label: string; part: number; ids: string[] }[] = [
+  { label: '一體', part: 1, ids: ['1.0'] },
+  { label: '二用', part: 2, ids: ['2.1', '2.2'] },
+  { label: '三遍', part: 3, ids: ['3.1', '3.2', '3.3'] },
+  { label: '四德', part: 4, ids: ['4.1', '4.2', '4.3', '4.4'] },
+  { label: '五止', part: 5, ids: ['5.1', '5.2', '5.3', '5.4', '5.5'] },
+  { label: '六觀', part: 6, ids: ['6.1', '6.2', '6.3', '6.4', '6.5', '6.6'] },
+];
+
+const byId = new Map(segments.map((s) => [s.id, s]));
+
+const nodes: TreeNode[] = [];
+rows.forEach((row, ri) => {
+  const n = row.ids.length;
+  const nodeW = Math.min(180, (W - 40 - (n - 1) * GAP) / n);
+  const totalW = n * nodeW + (n - 1) * GAP;
+  const y = TOP + ri * ROW_H;
+  const midY = y + NODE_H / 2;
+  row.ids.forEach((id, i) => {
+    const seg = byId.get(id);
+    if (!seg) return;
+    const x = CX - totalW / 2 + i * (nodeW + GAP);
+    const edgeX = x + nodeW / 2 < CX ? x : x + nodeW;
+    nodes.push({
+      id,
+      label: shortTitle(seg),
+      x,
+      y,
+      w: nodeW,
+      edge: { x1: CX, y1: midY, x2: edgeX, y2: midY },
+    });
+  });
+});
+
+const H = TOP + rows.length * ROW_H - (ROW_H - NODE_H) + 10;
+const trunk = { x: CX, y1: TOP + NODE_H / 2, y2: TOP + (rows.length - 1) * ROW_H + NODE_H / 2 };
+
+const MAIN_IDS = new Set(rows.flatMap((r) => r.ids));
+const sideSegs = segments.filter((s) => !MAIN_IDS.has(s.id));
+---
+
+<div class="outline-figure">
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="一體二用三遍四德五止六觀總綱圖">
+    {/* 中央主幹 */}
+    <line x1={trunk.x} y1={trunk.y1} x2={trunk.x} y2={trunk.y2} stroke="#d8d0bd" stroke-width="1" />
+    {/* 各行橫枝 */}
+    {nodes.map((n) => (
+      <line x1={n.edge.x1} y1={n.edge.y1} x2={n.edge.x2} y2={n.edge.y2} stroke="#d8d0bd" stroke-width="1" />
+    ))}
+    {/* 行標 */}
+    {rows.map((row, ri) => (
+      <text x="24" y={TOP + ri * ROW_H - 12} class="row-label">{row.label}</text>
+    ))}
+    {/* 節點 */}
+    {nodes.map((n) => (
+      <a href={`/read/${n.id}`} class="node-card" data-seg={n.id}>
+        <rect x={n.x} y={n.y} width={n.w} height={NODE_H} rx="8" />
+        <text x={n.x + n.w / 2} y={n.y + NODE_H / 2 + 5} text-anchor="middle">{n.label}</text>
+        <circle class="read-dot" cx={n.x + n.w - 10} cy={n.y + 10} r="4" />
+      </a>
+    ))}
+  </svg>
+</div>
+
+<p class="legend">朱砂小點表示已讀（儲存於本機瀏覽器）</p>
+
+<div class="side-links">
+  {sideSegs.map((s) => (
+    <a class="side-chip" href={`/read/${s.id}`} data-seg={s.id}>
+      {s.title}
+      <span class="read-dot-inline"></span>
+    </a>
+  ))}
+</div>
+
+<script>
+  const KEY = 'wjhy-read';
+  try {
+    const read = JSON.parse(localStorage.getItem(KEY) ?? '[]');
+    if (Array.isArray(read)) {
+      for (const el of document.querySelectorAll('[data-seg]')) {
+        if (read.includes(el.getAttribute('data-seg'))) {
+          el.setAttribute('data-read', '');
+        }
+      }
+    }
+  } catch {
+    /* 忽略損壞的本機資料 */
+  }
+</script>

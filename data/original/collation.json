@@ -1,0 +1,249 @@
+{
+ "meta": {
+  "base": "CBETA T45n1876 (底本)",
+  "compare": "维基文库《修華嚴奧旨妄盡還源觀》（简体、有句读）",
+  "url": "https://zh.wikisource.org/wiki/修華嚴奧旨妄盡還源觀",
+  "method": "opencc t2s 后逐字对齐，标点不参校"
+ },
+ "stats": {
+  "cbeta_chars": 6227,
+  "wikisource_chars": 6227,
+  "variants": 26
+ },
+ "variants": [
+  {
+   "lb": "0637a06",
+   "type": "異文",
+   "cbeta": "覩",
+   "wikisource": "睹",
+   "context": "顿现圆宗叵测覩纤毫以齐彰然",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0637a28",
+   "type": "異文",
+   "cbeta": "遍",
+   "wikisource": "偏",
+   "context": "一尘含容空有遍四行四德一者",
+   "ruling": "底本勝",
+   "note": "三遍之名「含容空有遍」，维基作「偏」形讹"
+  },
+  {
+   "lb": "0637c07",
+   "type": "異文",
+   "cbeta": "今",
+   "wikisource": "令",
+   "context": "行有感果之能今则托事表彰所",
+   "ruling": "底本勝",
+   "note": "「今則託事表彰」，维基作「令」形讹"
+  },
+  {
+   "lb": "0637c09",
+   "type": "異文",
+   "cbeta": "著",
+   "wikisource": "着",
+   "context": "所俱绝显焕炳著故名严也良以",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0638a14",
+   "type": "異文",
+   "cbeta": "覩",
+   "wikisource": "睹",
+   "context": "闻答大智圆明覩纤毫而周性海",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0638b12",
+   "type": "異文",
+   "cbeta": "逈",
+   "wikisource": "迥",
+   "context": "轻埃现于全躯逈超言虑之端透",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0638b24",
+   "type": "異文",
+   "cbeta": "不",
+   "wikisource": "大",
+   "context": "故名为妙用又不坏假名而常度",
+   "ruling": "底本勝",
+   "note": "「不壞假名而常度眾生」为通行语，维基作「大壞」误"
+  },
+  {
+   "lb": "0638c06",
+   "type": "異文",
+   "cbeta": "隥",
+   "wikisource": "蹬",
+   "context": "绪出三界之梯隥越苦海之迅航",
+   "ruling": "異體字",
+   "note": "梯隥，阶梯义，两通"
+  },
+  {
+   "lb": "0638c16",
+   "type": "異文",
+   "cbeta": "瞋",
+   "wikisource": "嗔",
+   "context": "不妄语远离贪瞋欺诈谄曲邪见",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0638c16",
+   "type": "異文",
+   "cbeta": "閙",
+   "wikisource": "闹",
+   "context": "见亦应远离愦閙少欲知足乃至",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0638c22",
+   "type": "異文",
+   "cbeta": "麁",
+   "wikisource": "粗",
+   "context": "久被尘累而有麁秽之垢若人唯",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0638c29",
+   "type": "異文",
+   "cbeta": "毘",
+   "wikisource": "毗",
+   "context": "涅槃之根本作毘尼之渐次为七",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0639a15",
+   "type": "维基多出",
+   "cbeta": "",
+   "wikisource": "音致",
+   "context": "大愿以身为质于三恶趣救赎",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0639c13",
+   "type": "異文",
+   "cbeta": "著",
+   "wikisource": "着",
+   "context": "者对治凡夫住著世间能舍二乘",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0640a04",
+   "type": "異文",
+   "cbeta": "沈",
+   "wikisource": "沉",
+   "context": "良缘终成难改沈沦苦海出离无",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0640b02",
+   "type": "異文",
+   "cbeta": "毘",
+   "wikisource": "毗",
+   "context": "为众生起神变毘卢遮那法如是",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0640b08",
+   "type": "異文",
+   "cbeta": "含",
+   "wikisource": "舍",
+   "context": "为之法无不俱含真性犹如日轮",
+   "ruling": "底本勝",
+   "note": "「無不俱含真性」，维基作「舍」形讹"
+  },
+  {
+   "lb": "0640b09",
+   "type": "異文",
+   "cbeta": "逈",
+   "wikisource": "迥",
+   "context": "犹如日轮照现逈处虚空有目之",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0640b09",
+   "type": "異文",
+   "cbeta": "覩",
+   "wikisource": "睹",
+   "context": "有目之流无不覩见生盲之辈亦",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0640b13",
+   "type": "異文",
+   "cbeta": "毘",
+   "wikisource": "毗",
+   "context": "无碍法界也谓毘卢遮那十身互",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0640c03",
+   "type": "異文",
+   "cbeta": "祇",
+   "wikisource": "只",
+   "context": "如善财童子从祇桓林中渐次南",
+   "ruling": "底本勝",
+   "note": "「祇桓」即祇園（祇陀林），维基作「只」误"
+  },
+  {
+   "lb": "0640c04",
+   "type": "異文",
+   "cbeta": "毘",
+   "wikisource": "毗",
+   "context": "中渐次南行至毘卢遮那庄严大",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0640c04",
+   "type": "異文",
+   "cbeta": "歛",
+   "wikisource": "敛",
+   "context": "大楼阁前暂时歛念白弥勒菩萨",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0641a08",
+   "type": "CBETA多出",
+   "cbeta": "纪重校",
+   "wikisource": "",
+   "context": "还源观纪重校纪重校宋晋水沙门净",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "0641a10",
+   "type": "異文",
+   "cbeta": "甞",
+   "wikisource": "尝",
+   "context": "孤山智圆法师甞称杜顺尊者抉",
+   "ruling": "異體字",
+   "note": ""
+  },
+  {
+   "lb": "?",
+   "type": "维基多出",
+   "cbeta": "",
+   "wikisource": "竟",
+   "context": "末云耳纪重校",
+   "ruling": "異體字",
+   "note": ""
+  }
+ ]
+}

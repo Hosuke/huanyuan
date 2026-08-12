@@ -1,0 +1,19 @@
+---
+import { splitLines, formatLb, type Segment } from '../lib/data';
+
+interface Props {
+  seg: Segment;
+}
+
+const { seg } = Astro.props;
+const lines = splitLines(seg.text);
+---
+
+<div class="sutra-text">
+  {lines.map((line) => (
+    <p class="sutra-line">
+      <span class="txt">{line.text}</span>
+      {line.lb && <span class="lb">{formatLb(line.lb)}</span>}
+    </p>
+  ))}
+</div>

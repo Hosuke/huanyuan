@@ -1,0 +1,362 @@
+:root {
+  --paper: #f7f3ea;
+  --paper-deep: #efe9db;
+  --ink: #2b2b26;
+  --ink-soft: #5c584c;
+  --ink-faint: #9a9484;
+  --cinnabar: #9e3b2e;
+  --ochre: #a67c2e;
+  --line: #d8d0bd;
+  --serif: "Noto Serif TC", "Songti TC", "SimSun", serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  line-height: 1.9;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: var(--cinnabar);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.container {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.container.wide {
+  max-width: 1240px;
+}
+
+main {
+  flex: 1;
+  padding: 2.5rem 0 4rem;
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* ---------- 頁首 ---------- */
+.site-header {
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-deep);
+}
+
+.site-header .container {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding-top: 0.9rem;
+  padding-bottom: 0.9rem;
+}
+
+.site-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--ink);
+}
+
+.site-title:hover {
+  text-decoration: none;
+  color: var(--cinnabar);
+}
+
+.site-nav {
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.9rem;
+}
+
+.site-nav a {
+  color: var(--ink-soft);
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+  color: var(--cinnabar);
+}
+
+/* ---------- 頁尾 ---------- */
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding: 1.5rem 0 2rem;
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+}
+
+/* ---------- 閱讀頁 ---------- */
+.read-head {
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.read-part {
+  font-size: 0.85rem;
+  color: var(--ochre);
+  letter-spacing: 0.2em;
+  margin: 0 0 0.35rem;
+}
+
+.read-title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.read-lb-range {
+  margin: 0.4rem 0 0;
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+}
+
+.sutra-line {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin: 0.35rem 0;
+}
+
+.sutra-line .txt {
+  flex: 1;
+  font-size: 1.05rem;
+}
+
+.sutra-line .lb {
+  flex: 0 0 auto;
+  font-size: 0.68rem;
+  color: var(--ink-faint);
+  font-family: Georgia, serif;
+  letter-spacing: 0.02em;
+}
+
+/* ---------- tab ---------- */
+.tabs {
+  margin-top: 3rem;
+}
+
+.tab-bar {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.tab-bar button {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: var(--ink-soft);
+}
+
+.tab-bar button[aria-selected="true"] {
+  color: var(--cinnabar);
+  border-bottom-color: var(--cinnabar);
+}
+
+.tab-panel {
+  padding: 1.25rem 0.25rem;
+  font-size: 0.98rem;
+}
+
+.tab-panel[hidden] {
+  display: none;
+}
+
+.placeholder {
+  color: var(--ink-faint);
+  padding: 2rem 0;
+  text-align: center;
+  border: 1px dashed var(--line);
+  border-radius: 4px;
+}
+
+/* ---------- 導航與已讀 ---------- */
+.read-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.9rem;
+}
+
+.btn-read {
+  font-family: var(--serif);
+  font-size: 0.9rem;
+  padding: 0.45rem 1.4rem;
+  border: 1px solid var(--ochre);
+  border-radius: 999px;
+  background: none;
+  color: var(--ochre);
+  cursor: pointer;
+  letter-spacing: 0.1em;
+}
+
+.btn-read[aria-pressed="true"] {
+  background: var(--ochre);
+  color: var(--paper);
+}
+
+/* ---------- 詞典 ---------- */
+.term-card {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fbf8f1;
+  padding: 1.1rem 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.term-card h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.term-card .pinyin {
+  color: var(--ink-faint);
+  font-size: 0.82rem;
+  margin-left: 0.6rem;
+  font-style: italic;
+}
+
+.term-card .def {
+  margin: 0.5rem 0;
+  color: var(--ink-soft);
+}
+
+.term-card .refs {
+  font-size: 0.85rem;
+}
+
+/* ---------- 總綱圖 ---------- */
+.outline-figure {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.outline-figure svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-width: 760px;
+}
+
+.node-card {
+  cursor: pointer;
+}
+
+.node-card rect {
+  fill: #fbf8f1;
+  stroke: var(--line);
+  stroke-width: 1;
+  rx: 8;
+  transition: stroke 0.15s;
+}
+
+.node-card:hover rect {
+  stroke: var(--cinnabar);
+}
+
+.node-card text {
+  font-family: var(--serif);
+  fill: var(--ink);
+  font-size: 15px;
+}
+
+.node-card .row-label {
+  fill: var(--ochre);
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+.read-dot {
+  fill: var(--cinnabar);
+  opacity: 0;
+}
+
+[data-read] .read-dot,
+.read-dot[data-read] {
+  opacity: 1;
+}
+
+.side-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.side-chip {
+  position: relative;
+  font-size: 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.25rem 0.9rem;
+  color: var(--ink-soft);
+  background: #fbf8f1;
+}
+
+.side-chip:hover {
+  border-color: var(--cinnabar);
+  color: var(--cinnabar);
+  text-decoration: none;
+}
+
+.side-chip .read-dot-inline {
+  display: none;
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cinnabar);
+}
+
+.side-chip[data-read] .read-dot-inline {
+  display: block;
+}
+
+.legend {
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+}
+
+.legend::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cinnabar);
+  margin-right: 0.4rem;
+  vertical-align: 1px;
+}
