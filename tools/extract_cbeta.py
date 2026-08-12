@@ -13,8 +13,6 @@ NS = {
     "tei": "http://www.tei-c.org/ns/1.0",
     "cb": "http://www.cbeta.org/ns/1.0",
 }
-SRC = "data/source/T45n1876.xml"
-OUT = "data/original/fulltext.txt"
 
 SKIP_TAGS = {"note", "app", "rdg", "witDetail", "anchor", "milestone", "figue", "figure"}
 
@@ -62,7 +60,9 @@ def collect(elem, buf, glyphs):
 
 
 def main():
-    tree = etree.parse(SRC)
+    src = sys.argv[1] if len(sys.argv) > 1 else "data/source/T45n1876.xml"
+    out = sys.argv[2] if len(sys.argv) > 2 else "data/original/fulltext.txt"
+    tree = etree.parse(src)
     root = tree.getroot()
     body = root.find(".//tei:text/tei:body", NS)
     buf = []
@@ -70,10 +70,10 @@ def main():
     text = "".join(buf)
     # 清理：合并空行、去首尾空白
     lines = [re.sub(r"\s+", "", ln) for ln in text.split("\n")]
-    lines = [ln for ln in lines if ln and ln not in ("", None)]
-    with open(OUT, "w", encoding="utf-8") as f:
+    lines = [ln for ln in lines if ln and not re.fullmatch(r"(【\w+】)?", ln)]
+    with open(out, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
-    print(f"OK {len(lines)} lines -> {OUT}")
+    print(f"OK {len(lines)} lines -> {out}")
 
 
 if __name__ == "__main__":
