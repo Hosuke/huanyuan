@@ -186,6 +186,19 @@ h1, h2, h3 {
   font-size: 0.98rem;
 }
 
+.tab-panel .eps {
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+  border-left: 3px solid var(--line);
+  padding-left: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.tab-panel .notes {
+  white-space: pre-line;
+  line-height: 1.9;
+}
+
 .tab-panel[hidden] {
   display: none;
 }

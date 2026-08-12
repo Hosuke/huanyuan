@@ -63,7 +63,14 @@ const commentaries = [
         <div class="tab-panel" data-panel={key} role="tabpanel" hidden>
           {c.status === 'pending'
             ? <p class="placeholder">整理中，敬請期待</p>
-            : <p>{c.notes}</p>}
+            : (
+              <>
+                {c.episodes.length > 0 && (
+                  <p class="eps">講記出處：{c.episodes.join('、')}</p>
+                )}
+                <div class="notes">{c.notes}</div>
+              </>
+            )}
         </div>
       );
     })}
