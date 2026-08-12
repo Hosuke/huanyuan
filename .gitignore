@@ -12,3 +12,6 @@ __pycache__/
 
 # os
 .DS_Store
+
+# 待 workflow 权限开通前不入库
+.github/
