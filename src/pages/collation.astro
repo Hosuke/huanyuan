@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import { base, collation, formatLb, lbToSegmentId } from '../lib/data';
+
+const method = collation.meta.method
+  .replace(/^opencc/i, 'OpenCC')
+  .replaceAll('后', '後')
+  .replaceAll('对', '對')
+  .replaceAll('齐', '齊')
+  .replaceAll('标', '標')
+  .replaceAll('参', '參');
+---
+
+<Base title="校勘記" current="collation" wide>
+  <header class="read-head">
+    <h1 class="read-title">校勘記</h1>
+    <p>
+      底本為 CBETA T45n1876，對校維基文庫《修華嚴奧旨妄盡還源觀》。
+      對校方法：{method}。
+    </p>
+    <p class="collation-stats">
+      全文 {collation.stats.cbeta_chars} 字，錄異文 {collation.stats.variants} 處。
+    </p>
+  </header>
+
+  <div class="collation-wrap">
+    <table class="collation-table">
+      <thead>
+        <tr>
+          <th scope="col">行號</th>
+          <th scope="col">底本</th>
+          <th scope="col">對校本</th>
+          <th scope="col">判定</th>
+          <th scope="col">備註</th>
+        </tr>
+      </thead>
+      <tbody>
+        {collation.variants.map((variant) => {
+          const segmentId = lbToSegmentId(variant.lb);
+          return (
+            <tr>
+              <td>
+                {segmentId ? (
+                  <a href={`${base}/read/${segmentId}`}>{formatLb(variant.lb)}</a>
+                ) : (
+                  formatLb(variant.lb)
+                )}
+              </td>
+              <td>{variant.cbeta || '—'}</td>
+              <td>{variant.wikisource || '—'}</td>
+              <td>{variant.ruling}</td>
+              <td>
+                {variant.note || '—'}
+                {variant.context && (
+                  <small class="variant-context">上下文：{variant.context}</small>
+                )}
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+</Base>

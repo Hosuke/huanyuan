@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import { base } from '../lib/data';
+---
+
+<Base title="未尋此頁">
+  <section class="not-found">
+    <h1>迷時謂東為西</h1>
+    <p><a href={base}>悟已西即是東——返回總綱</a></p>
+  </section>
+</Base>
+
+<style>
+  .not-found {
+    min-height: 52vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+  }
+
+  .not-found h1 {
+    color: var(--ink);
+    font-size: clamp(1.5rem, 5vw, 2.2rem);
+    letter-spacing: 0.16em;
+  }
+</style>

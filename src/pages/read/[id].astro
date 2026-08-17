@@ -2,7 +2,16 @@
 import Base from '../../layouts/Base.astro';
 import SegmentText from '../../components/SegmentText.astro';
 import ReadToggle from '../../components/ReadToggle.astro';
-import { data, segments, formatLb, base, type Segment } from '../../lib/data';
+import {
+  base,
+  data,
+  formatEpisodes,
+  formatLb,
+  quotesBySegment,
+  segments,
+  termsBySegment,
+  type Segment,
+} from '../../lib/data';
 
 export function getStaticPaths() {
   return segments.map((seg, i) => ({
@@ -21,7 +30,56 @@ interface Props {
   next: Segment | null;
 }
 
-const { seg, prev, next } = Astro.props;
+const { seg, prev, next } = Astro.props as Props;
+const quotes = quotesBySegment(seg.id);
+const relatedTerms = termsBySegment(seg.id);
+
+interface NotePoint {
+  text: string;
+  source: string;
+}
+
+interface ParsedNotes {
+  summary: string;
+  points: NotePoint[];
+  caveat?: string;
+}
+
+/** 淨空講記須整體符合約定格式才結構化；任一異常皆安全回退。 */
+function parseJingkongNotes(notes: string): ParsedNotes | undefined {
+  try {
+    const normalized = notes.replace(/\r\n?/g, '\n').trim();
+    const blocks = normalized.split(/\n\s*\n/);
+    if (blocks.length < 2) return undefined;
+
+    const summary = blocks.shift()?.trim() ?? '';
+    if (!summary || summary.startsWith('· ')) return undefined;
+
+    const points: NotePoint[] = [];
+    let caveat: string | undefined;
+    const remainingLines = blocks.join('\n').split('\n').map((line) => line.trim()).filter(Boolean);
+
+    for (const line of remainingLines) {
+      if (line.startsWith('· ')) {
+        const match = /^·\s+(.+?)【([^【】]+)】$/.exec(line);
+        if (!match) return undefined;
+        points.push({ text: match[1], source: match[2] });
+        continue;
+      }
+      if (/^（整理(?:說明|说明)：.+）$/.test(line) && caveat === undefined) {
+        caveat = line;
+        continue;
+      }
+      return undefined;
+    }
+
+    return points.length > 0 ? { summary, points, caveat } : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+const parsedJingkong = parseJingkongNotes(seg.commentaries.jingkong.notes);
 
 const commentaries = [
   { key: 'baihua', label: '白話' },
@@ -42,31 +100,91 @@ const commentaries = [
 
   <SegmentText seg={seg} />
 
+  {quotes.length > 0 && (
+    <section class="reading-aside" aria-labelledby="quotes-head">
+      <h2 class="aside-head" id="quotes-head">本段徵引</h2>
+      {quotes.map((quote) => {
+        const identified = [
+          quote.identified.canon,
+          quote.identified.juan,
+          quote.identified.pin,
+          quote.identified.cbeta_ref,
+        ].filter(Boolean);
+        return (
+          <blockquote class="quote-item">
+            <p>{quote.quote}</p>
+            <cite>
+              《{quote.work}》
+              {quote.cited_as !== quote.work && <>（文中稱「{quote.cited_as}」）</>}
+            </cite>
+            {identified.length > 0 && <p class="quote-source">考據：{identified.join('・')}</p>}
+          </blockquote>
+        );
+      })}
+    </section>
+  )}
+
+  {relatedTerms.length > 0 && (
+    <section class="reading-aside" aria-labelledby="terms-head">
+      <h2 class="aside-head" id="terms-head">相關名相</h2>
+      <div class="side-links">
+        {relatedTerms.map((term) => (
+          <a class="side-chip" href={`${base}/dict#${term.id}`}>{term.term}</a>
+        ))}
+      </div>
+    </section>
+  )}
+
   <section class="tabs">
     <div class="tab-bar" role="tablist">
       {commentaries.map((c, i) => (
-        <button role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-tab={c.key}>
+        <button
+          id={`tab-${c.key}`}
+          role="tab"
+          aria-controls={`panel-${c.key}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          tabindex={i === 0 ? 0 : -1}
+          data-tab={c.key}
+        >
           {c.label}
         </button>
       ))}
     </div>
 
-    <div class="tab-panel" data-panel="baihua" role="tabpanel">
+    <div
+      class="tab-panel"
+      id="panel-baihua"
+      data-panel="baihua"
+      role="tabpanel"
+      aria-labelledby="tab-baihua"
+    >
       {seg.translation
-        ? <p>{seg.translation}</p>
+        ? (
+          <>
+            <p>{seg.translation}</p>
+            <p class="provenance">白話為本站試譯（AI 協助起草，未經審定），僅供學習參考。</p>
+          </>
+        )
         : <p class="placeholder">整理中，敬請期待</p>}
     </div>
 
-    {(['tifo', 'jingkong', 'mengcan'] as const).map((key) => {
+    {(['tifo', 'mengcan'] as const).map((key) => {
       const c = seg.commentaries[key];
       return (
-        <div class="tab-panel" data-panel={key} role="tabpanel" hidden>
+        <div
+          class="tab-panel"
+          id={`panel-${key}`}
+          data-panel={key}
+          role="tabpanel"
+          aria-labelledby={`tab-${key}`}
+          hidden
+        >
           {c.status === 'pending'
             ? <p class="placeholder">整理中，敬請期待</p>
             : (
               <>
                 {c.episodes.length > 0 && (
-                  <p class="eps">講記出處：{c.episodes.join('、')}</p>
+                  <p class="eps">講記出處：{formatEpisodes(c.episodes)}</p>
                 )}
                 <div class="notes">{c.notes}</div>
               </>
@@ -74,6 +192,38 @@ const commentaries = [
         </div>
       );
     })}
+
+    <div
+      class="tab-panel"
+      id="panel-jingkong"
+      data-panel="jingkong"
+      role="tabpanel"
+      aria-labelledby="tab-jingkong"
+      hidden
+    >
+      {seg.commentaries.jingkong.status === 'pending'
+        ? <p class="placeholder">整理中，敬請期待</p>
+        : (
+          <>
+            {seg.commentaries.jingkong.episodes.length > 0 && (
+              <p class="eps">講記出處：{formatEpisodes(seg.commentaries.jingkong.episodes)}</p>
+            )}
+            {parsedJingkong
+              ? (
+                <div class="notes-structured">
+                  <p class="notes-summary">{parsedJingkong.summary}</p>
+                  <ul class="points">
+                    {parsedJingkong.points.map((point) => (
+                      <li>{point.text}<span class="src">{point.source}</span></li>
+                    ))}
+                  </ul>
+                  {parsedJingkong.caveat && <p class="caveat">{parsedJingkong.caveat}</p>}
+                </div>
+              )
+              : <div class="notes">{seg.commentaries.jingkong.notes}</div>}
+          </>
+        )}
+    </div>
   </section>
 
   <div style="margin-top: 2.5rem; text-align: center;">
@@ -92,14 +242,50 @@ const commentaries = [
 </Base>
 
 <script>
+  const STORAGE_KEY = 'wjhy-tab';
+  const allowedTabs = new Set(['baihua', 'tifo', 'jingkong', 'mengcan']);
   const tabs = document.querySelectorAll<HTMLButtonElement>('[role="tab"]');
   const panels = document.querySelectorAll<HTMLElement>('[data-panel]');
-  tabs.forEach((tab) => {
-    tab.addEventListener('click', () => {
-      tabs.forEach((t) => t.setAttribute('aria-selected', String(t === tab)));
-      panels.forEach((p) => {
-        p.hidden = p.getAttribute('data-panel') !== tab.getAttribute('data-tab');
-      });
+
+  function activate(tab: HTMLButtonElement, moveFocus = false) {
+    const key = tab.dataset.tab;
+    if (!key || !allowedTabs.has(key)) return;
+
+    tabs.forEach((item) => {
+      const selected = item === tab;
+      item.setAttribute('aria-selected', String(selected));
+      item.tabIndex = selected ? 0 : -1;
+    });
+    panels.forEach((panel) => {
+      panel.hidden = panel.dataset.panel !== key;
+    });
+    try {
+      localStorage.setItem(STORAGE_KEY, key);
+    } catch {
+      /* 瀏覽器禁用儲存時仍可正常切換。 */
+    }
+    if (moveFocus) tab.focus();
+  }
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => activate(tab));
+    tab.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      event.preventDefault();
+      const offset = event.key === 'ArrowRight' ? 1 : -1;
+      const nextIndex = (index + offset + tabs.length) % tabs.length;
+      const nextTab = tabs.item(nextIndex);
+      if (nextTab) activate(nextTab, true);
     });
   });
+
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved && allowedTabs.has(saved)) {
+      const savedTab = Array.from(tabs).find((tab) => tab.dataset.tab === saved);
+      if (savedTab) activate(savedTab);
+    }
+  } catch {
+    /* 損壞或不可用的 localStorage 不影響預設白話頁籤。 */
+  }
 </script>

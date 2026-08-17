@@ -14,7 +14,7 @@ NS = {
     "cb": "http://www.cbeta.org/ns/1.0",
 }
 
-SKIP_TAGS = {"note", "app", "rdg", "witDetail", "anchor", "milestone", "figue", "figure"}
+SKIP_TAGS = {"note", "app", "rdg", "witDetail", "anchor", "milestone", "figue", "figure", "mulu"}
 
 
 def build_glyphs(root):

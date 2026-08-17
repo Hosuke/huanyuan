@@ -1,5 +1,7 @@
 import segmentsJson from '../../data/original/segments.json';
 import termsJson from '../../data/dict/terms.json';
+import quotesJson from '../../data/original/quotes.json';
+import collationJson from '../../data/original/collation.json';
 
 export interface Part {
   part: number;
@@ -47,6 +49,46 @@ export interface Term {
   refs: string[];
 }
 
+export interface Quote {
+  id: string;
+  segment: string;
+  cited_as: string;
+  work: string;
+  quote: string;
+  identified: {
+    canon: string;
+    juan: string;
+    pin: string;
+    cbeta_ref: string;
+  };
+  status: string;
+}
+
+export interface Variant {
+  lb: string;
+  type: string;
+  cbeta: string;
+  wikisource: string;
+  context: string;
+  ruling: string;
+  note: string;
+}
+
+interface CollationData {
+  meta: {
+    base: string;
+    compare: string;
+    url: string;
+    method: string;
+  };
+  stats: {
+    cbeta_chars: number;
+    wikisource_chars: number;
+    variants: number;
+  };
+  variants: Variant[];
+}
+
 export const data = segmentsJson as unknown as SegmentsData;
 export const segments = data.segments;
 
@@ -54,8 +96,49 @@ export const terms = (termsJson as unknown as Term[]).slice().sort((a, b) =>
   a.pinyin.localeCompare(b.pinyin, 'en'),
 );
 
+const quotes = (quotesJson as unknown as { quotes: Quote[] }).quotes;
+
+export const collation = collationJson as unknown as CollationData;
+
 export function getSegment(id: string): Segment | undefined {
   return segments.find((s) => s.id === id);
+}
+
+export function quotesBySegment(id: string): Quote[] {
+  return quotes.filter((quote) => quote.segment === id);
+}
+
+export function termsBySegment(id: string): Term[] {
+  return terms.filter((term) => term.refs.includes(id));
+}
+
+/** 依 CBETA 行號定位所屬段落；行號格式固定時可直接按字典序比較。 */
+export function lbToSegmentId(lb: string): string | undefined {
+  return segments.find((segment) => segment.start_lb <= lb && lb <= segment.end_lb)?.id;
+}
+
+/** 將講記集號按檔名歸組，如 12-046-004、12-046-005 -> 12-046 第 4、5 集。 */
+export function formatEpisodes(eps: string[]): string {
+  const groups = new Map<string, string[]>();
+
+  for (const episode of eps) {
+    const match = episode.match(/^(.+)-(\d+)$/);
+    if (!match) {
+      const standalone = groups.get(episode) ?? [];
+      standalone.push('');
+      groups.set(episode, standalone);
+      continue;
+    }
+
+    const [, filename, episodeNumber] = match;
+    const numbers = groups.get(filename) ?? [];
+    numbers.push(String(Number.parseInt(episodeNumber, 10)));
+    groups.set(filename, numbers);
+  }
+
+  return Array.from(groups, ([filename, numbers]) =>
+    numbers[0] === '' ? filename : `${filename} 第 ${numbers.join('、')} 集`,
+  ).join('；');
 }
 
 /** 0637a06 -> T.637a06（去掉行号前导零） */

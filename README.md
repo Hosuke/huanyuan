@@ -26,7 +26,7 @@ src/
 原文更新或重跑分段時：
 
 ```bash
-python3 tools/extract_cbeta.py && python3 tools/build_segments.py
+python3 tools/extract_cbeta.py && python3 tools/build_segments.py && python3 tools/merge_jingkong.py && python3 tools/merge_translations.py
 ```
 
 產出 `data/original/segments.json`，Astro 端以相對路徑直接 import JSON，無額外建置步驟。

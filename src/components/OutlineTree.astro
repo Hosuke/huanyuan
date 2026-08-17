@@ -99,16 +99,26 @@ const sideSegs = segments.filter((s) => !MAIN_IDS.has(s.id));
 
 <script>
   const KEY = 'wjhy-read';
-  try {
-    const read = JSON.parse(localStorage.getItem(KEY) ?? '[]');
-    if (Array.isArray(read)) {
-      for (const el of document.querySelectorAll('[data-seg]')) {
-        if (read.includes(el.getAttribute('data-seg'))) {
-          el.setAttribute('data-read', '');
+  function render() {
+    const elements = document.querySelectorAll('[data-seg]');
+    for (const el of elements) {
+      el.removeAttribute('data-read');
+    }
+
+    try {
+      const read = JSON.parse(localStorage.getItem(KEY) ?? '[]');
+      if (Array.isArray(read)) {
+        for (const el of elements) {
+          if (read.includes(el.getAttribute('data-seg'))) {
+            el.setAttribute('data-read', '');
+          }
         }
       }
+    } catch {
+      /* 忽略損壞的本機資料 */
     }
-  } catch {
-    /* 忽略損壞的本機資料 */
   }
+
+  render();
+  window.addEventListener('pageshow', render);
 </script>

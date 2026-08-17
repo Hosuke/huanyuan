@@ -1,7 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import OutlineTree from '../components/OutlineTree.astro';
-import { data } from '../lib/data';
+import { READ_STORAGE_KEY, base, data, segments } from '../lib/data';
+
+const segmentIds = segments.map((segment) => segment.id);
 ---
 
 <Base title="總綱" wide current="home">
@@ -12,5 +14,65 @@ import { data } from '../lib/data';
       一體、二用、三遍、四德、五止、六觀——點擊節點進入對應段落。
     </p>
   </header>
+
+  <section class="reading-progress" aria-label="閱讀進度">
+    <div class="progress-meta">
+      <span data-progress-count>全篇共 {segmentIds.length} 段</span>
+      <a
+        class="continue-link"
+        data-continue-link
+        href={`${base}/read/${segmentIds[0]}`}
+        hidden
+      >續讀</a>
+    </div>
+    <div
+      class="progress-track"
+      data-progress-track
+      role="progressbar"
+      aria-label="已讀段落"
+      aria-valuemin="0"
+      aria-valuemax={segmentIds.length}
+      aria-valuenow="0"
+      hidden
+    >
+      <span class="progress-fill" data-progress-fill></span>
+    </div>
+  </section>
+
   <OutlineTree />
 </Base>
+
+<script is:inline define:vars={{ segmentIds, base, storageKey: READ_STORAGE_KEY }}>
+  const count = document.querySelector('[data-progress-count]');
+  const link = document.querySelector('[data-continue-link]');
+  const track = document.querySelector('[data-progress-track]');
+  const fill = document.querySelector('[data-progress-fill]');
+
+  function render() {
+    if (count && link instanceof HTMLAnchorElement && track instanceof HTMLElement && fill instanceof HTMLElement) {
+      let stored = [];
+      try {
+        const value = JSON.parse(localStorage.getItem(storageKey) ?? '[]');
+        if (Array.isArray(value)) stored = value.filter((item) => typeof item === 'string');
+      } catch {
+        stored = [];
+      }
+
+      const read = new Set(stored);
+      const done = segmentIds.filter((id) => read.has(id)).length;
+      const firstUnread = segmentIds.find((id) => !read.has(id));
+      const destination = firstUnread ?? segmentIds[0];
+
+      count.textContent = `已讀 ${done}/${segmentIds.length}`;
+      link.textContent = firstUnread ? '續讀' : `重讀 ${segmentIds[0]}`;
+      link.href = `${base}/read/${destination}`;
+      link.hidden = false;
+      track.hidden = false;
+      track.setAttribute('aria-valuenow', String(done));
+      fill.style.width = `${segmentIds.length > 0 ? (done / segmentIds.length) * 100 : 0}%`;
+    }
+  }
+
+  render();
+  window.addEventListener('pageshow', render);
+</script>

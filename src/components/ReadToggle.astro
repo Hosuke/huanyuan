@@ -8,7 +8,7 @@ const { id } = Astro.props;
 
 <button class="btn-read" data-read-toggle aria-pressed="false">標記已讀</button>
 
-<script define:vars={{ id }}>
+<script is:inline define:vars={{ id }}>
   const KEY = 'wjhy-read';
   const btn = document.querySelector('[data-read-toggle]');
 
