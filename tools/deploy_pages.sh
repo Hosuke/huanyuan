@@ -20,8 +20,8 @@ fi
   cp -R "$OLDPWD/dist/"* .
   touch .nojekyll
   git add -A
-  git -c user.name="Huayan Bot" -c user.email="noreply@local" \
-      commit -m "pages: deploy $(date '+%Y-%m-%d %H:%M')" --quiet
+  # 沿用仓库 git 身份（禁止 -c 覆盖 user.name/user.email）
+  git commit -m "pages: deploy $(date '+%Y-%m-%d %H:%M')" --quiet
   git push origin gh-pages
 )
 git worktree remove --force "$WT"
