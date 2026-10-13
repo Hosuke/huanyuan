@@ -1,27 +1,36 @@
 ---
 import Base from '../layouts/Base.astro';
-import { terms, getSegment, base } from '../lib/data';
+import { base, getSegment, shortTitle, terms } from '../lib/data';
 ---
 
-<Base title="名相詞典" current="dict">
-  <header class="read-head">
-    <h1 class="read-title">名相詞典</h1>
-    <p class="read-lb-range">本觀常用名相，依拼音排序。</p>
+<Base title="名相詞典" current="dict" wide>
+  <header class="page-head">
+    <h1>名相詞典</h1>
+    <p>本觀常用名相 {terms.length} 條，依拼音排序。閱讀頁原文中以綠色虛線標出，點擊即見釋義。</p>
   </header>
 
-  {terms.map((t) => (
-    <article class="term-card" id={t.id}>
-      <h3>{t.term}<span class="pinyin">{t.pinyin}</span></h3>
-      <p class="def">{t.def}</p>
-      <p class="refs">
-        出處：
-        {t.refs.map((r, i) => (
-          <>
-            {i > 0 && '、'}
-            <a href={`${base}/read/${r}`}>{getSegment(r)?.title ?? r}</a>
-          </>
-        ))}
-      </p>
-    </article>
-  ))}
+  <div class="filter-bar">
+    <input class="filter-input" type="search" placeholder="篩選名相或釋義，如「海印」「三昧」" aria-label="篩選名相" data-filter />
+    <span class="filter-count" data-filter-count>{terms.length} 條</span>
+  </div>
+
+  <div class="term-grid">
+    {terms.map((t) => (
+      <article class="term-card" id={t.id} data-filter-text={`${t.term} ${t.pinyin} ${t.def}`}>
+        <h2>{t.term}<span class="pinyin">{t.pinyin}</span></h2>
+        <p class="def">{t.def}</p>
+        <div class="ref-chips">
+          {t.refs.map((r) => {
+            const seg = getSegment(r);
+            return <a class="ref-chip" href={`${base}/read/${r}`}>{r} {seg ? shortTitle(seg) : ''}</a>;
+          })}
+        </div>
+      </article>
+    ))}
+  </div>
+  <p class="placeholder" data-filter-empty hidden>無相符條目。</p>
 </Base>
+
+<script>
+  import '../scripts/filter';
+</script>

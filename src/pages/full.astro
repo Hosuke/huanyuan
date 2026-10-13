@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import AnnotatedText from '../components/AnnotatedText.astro';
+import { base, data, formatLb, gates, segments } from '../lib/data';
+
+const groups = data.parts
+  .map((part) => ({
+    part,
+    gate: gates.find((g) => g.part === part.part),
+    segs: segments.filter((s) => s.part === part.part),
+  }))
+  .filter((g) => g.segs.length > 0);
+---
+
+<Base title="通讀全文" current="full" wide>
+  <header class="page-head">
+    <p class="kicker">{data.cbeta}・一卷</p>
+    <h1>{data.sutra}</h1>
+    <p>全文一頁通讀。可在右上「閱讀設定」切換白話並列、字號與行號；點段題入逐段精讀。</p>
+  </header>
+
+  <div class="reading-tools">
+    <button class="chip-toggle" type="button" data-toggle-pref="parallel:on:off" aria-pressed="false">白話並列</button>
+    <button class="chip-toggle" type="button" data-toggle-pref="lb:on:off" aria-pressed="false">行號</button>
+    <span class="legend-inline">
+      {groups.map(({ part, gate }) => <a href={`#p-${part.part}`}>{gate ? gate.name : part.name}</a>)}
+    </span>
+  </div>
+
+  {groups.map(({ part, gate, segs }) => (
+    <section class="full-part" id={`p-${part.part}`}>
+      <h2>{gate ? gate.full : part.name}{gate && <span class="muted" style="font-size: 0.85rem; letter-spacing: 0.05em;">{gate.gist}</span>}</h2>
+      {segs.map((s) => (
+        <article class="full-seg" id={`s-${s.id}`}>
+          <h3>
+            <a href={`${base}/read/${s.id}`}>{s.title}</a>
+            <span class="sid">{s.id}・{formatLb(s.start_lb)}</span>
+          </h3>
+          <div class="pair">
+            <AnnotatedText seg={s} plain />
+            <p class="translation parallel-only">{s.translation}</p>
+          </div>
+        </article>
+      ))}
+    </section>
+  ))}
+</Base>

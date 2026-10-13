@@ -15,3 +15,6 @@ __pycache__/
 
 # 待 workflow 权限开通前不入库
 .github/
+
+# 講義 OCR 原文（版權屬講者，僅本機整理用）
+data/sources/tifo/

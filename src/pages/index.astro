@@ -1,75 +1,111 @@
 ---
 import Base from '../layouts/Base.astro';
-import OutlineTree from '../components/OutlineTree.astro';
-import { READ_STORAGE_KEY, base, data, segments } from '../lib/data';
+import Mandala from '../components/Mandala.astro';
+import { base, data, excerpt, gates, segments, shortTitle } from '../lib/data';
 
-const segmentIds = segments.map((segment) => segment.id);
+const segmentIds = segments.map((s) => s.id);
+const titles = Object.fromEntries(segments.map((s) => [s.id, s.title]));
+
+/** 目次：六門之外的卷首、結頌、附錄也列入，按 part 分組。 */
+const groups = data.parts.map((part) => ({
+  part,
+  gate: gates.find((g) => g.part === part.part),
+  segs: segments.filter((s) => s.part === part.part),
+}));
 ---
 
 <Base title="總綱" wide current="home">
-  <header class="read-head">
-    <p class="read-part">{data.cbeta}・{data.author}</p>
-    <h1 class="read-title">{data.sutra}</h1>
-    <p class="read-lb-range">
-      一體、二用、三遍、四德、五止、六觀——點擊節點進入對應段落。
-    </p>
-  </header>
-
-  <section class="reading-progress" aria-label="閱讀進度">
-    <div class="progress-meta">
-      <span data-progress-count>全篇共 {segmentIds.length} 段</span>
-      <a
-        class="continue-link"
-        data-continue-link
-        href={`${base}/read/${segmentIds[0]}`}
-        hidden
-      >續讀</a>
+  <section class="hero">
+    <div>
+      <p class="kicker">華嚴宗・{data.author.replace('唐大薦福寺翻經沙門', '唐 ')}・{data.cbeta}</p>
+      <h1><small>修華嚴奧旨</small>妄盡還源觀</h1>
+      <p class="lede">
+        賢首國師總攝《華嚴》大旨，「別舉六門，通為一觀」——顯一體、起二用、示三遍、行四德、入五止、起六觀。
+        本站以 CBETA 原文為骨，逐段配白話試譯、法師講記、名相與校勘，供對讀研習。
+      </p>
+      <div class="hero-actions">
+        <a class="btn primary" href={`${base}/read/${segmentIds[0]}`} data-continue>開卷</a>
+        <a class="btn" href={`${base}/full`}>通讀全文</a>
+        <button class="btn quiet" type="button" data-open-search>搜尋原文與講記</button>
+      </div>
     </div>
-    <div
-      class="progress-track"
-      data-progress-track
-      role="progressbar"
-      aria-label="已讀段落"
-      aria-valuemin="0"
-      aria-valuemax={segmentIds.length}
-      aria-valuenow="0"
-      hidden
-    >
-      <span class="progress-fill" data-progress-fill></span>
+    <div class="hero-progress" aria-live="polite">
+      <div class="label">閱讀進度</div>
+      <div class="num"><span data-done>0</span><small> / {segmentIds.length} 段</small></div>
+      <div class="meter" role="progressbar" aria-label="已讀段落" aria-valuemin="0" aria-valuemax={segmentIds.length} aria-valuenow="0" data-meter>
+        <span></span>
+      </div>
+      <p class="muted" style="margin: 0.6rem 0 0; font-size: 0.78rem;" data-last-note>進度僅存於本機瀏覽器。</p>
     </div>
   </section>
 
-  <OutlineTree />
+  <div class="section-head">
+    <h2>六門法界圖</h2>
+    <p>一體為本，五環為用與行</p>
+  </div>
+  <Mandala />
+
+  <div class="section-head">
+    <h2>全篇目次</h2>
+    <p>{segmentIds.length} 段・依大正藏原文分段</p>
+  </div>
+  <div class="gates">
+    {groups.map(({ part, gate, segs }) => (
+      <section class="gate" aria-labelledby={`gate-${part.part}`}>
+        <div class="gate-head">
+          <span class="gate-num" id={`gate-${part.part}`}>{gate ? gate.name : part.name}</span>
+          <span class="gate-full">{gate ? gate.full : segs.length > 1 ? `${segs.length} 段` : ''}</span>
+        </div>
+        <div>
+          {gate && <p class="gate-gist">{gate.gist}</p>}
+          <ol class="seg-list">
+            {segs.map((s) => (
+              <li>
+                <a class="seg-card" href={`${base}/read/${s.id}`} data-seg={s.id}>
+                  <span class="sc-id">{s.id}</span>
+                  <span class="sc-title">{shortTitle(s)}</span>
+                  <span class="sc-ex">{excerpt(s.translation, 54)}</span>
+                  <span class="sc-dot" aria-hidden="true"></span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+    ))}
+  </div>
 </Base>
 
-<script is:inline define:vars={{ segmentIds, base, storageKey: READ_STORAGE_KEY }}>
-  const count = document.querySelector('[data-progress-count]');
-  const link = document.querySelector('[data-continue-link]');
-  const track = document.querySelector('[data-progress-track]');
-  const fill = document.querySelector('[data-progress-fill]');
+<script define:vars={{ segmentIds, titles }} is:inline>
+  window.__WJHY_HOME__ = { segmentIds, titles };
+</script>
+
+<script>
+  import { LAST_KEY, get, paintRead } from '../scripts/store';
+
+  const { segmentIds, titles } = (window as unknown as { __WJHY_HOME__: { segmentIds: string[]; titles: Record<string, string> } }).__WJHY_HOME__;
+  const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   function render() {
-    if (count && link instanceof HTMLAnchorElement && track instanceof HTMLElement && fill instanceof HTMLElement) {
-      let stored = [];
-      try {
-        const value = JSON.parse(localStorage.getItem(storageKey) ?? '[]');
-        if (Array.isArray(value)) stored = value.filter((item) => typeof item === 'string');
-      } catch {
-        stored = [];
-      }
+    const read = paintRead();
+    const done = segmentIds.filter((id) => read.has(id)).length;
+    const doneEl = document.querySelector('[data-done]');
+    const meter = document.querySelector<HTMLElement>('[data-meter]');
+    if (doneEl) doneEl.textContent = String(done);
+    if (meter) {
+      meter.setAttribute('aria-valuenow', String(done));
+      meter.querySelector<HTMLElement>('span')!.style.width = `${(done / segmentIds.length) * 100}%`;
+    }
 
-      const read = new Set(stored);
-      const done = segmentIds.filter((id) => read.has(id)).length;
-      const firstUnread = segmentIds.find((id) => !read.has(id));
-      const destination = firstUnread ?? segmentIds[0];
-
-      count.textContent = `已讀 ${done}/${segmentIds.length}`;
-      link.textContent = firstUnread ? '續讀' : `重讀 ${segmentIds[0]}`;
-      link.href = `${base}/read/${destination}`;
-      link.hidden = false;
-      track.hidden = false;
-      track.setAttribute('aria-valuenow', String(done));
-      fill.style.width = `${segmentIds.length > 0 ? (done / segmentIds.length) * 100 : 0}%`;
+    const last = get(LAST_KEY);
+    const firstUnread = segmentIds.find((id) => !read.has(id));
+    const target = last && segmentIds.includes(last) ? last : firstUnread;
+    const cta = document.querySelector<HTMLAnchorElement>('[data-continue]');
+    const note = document.querySelector('[data-last-note]');
+    if (cta && target && (done > 0 || last)) {
+      cta.href = `${BASE}/read/${target}`;
+      cta.textContent = `續讀 ${target}`;
+      if (note) note.textContent = `上次讀到：${titles[target] ?? target}`;
     }
   }
 

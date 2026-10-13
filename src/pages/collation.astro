@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { base, collation, formatLb, lbToSegmentId } from '../lib/data';
+import { base, collation, formatLb, getSegment, lbToSegmentId, shortTitle } from '../lib/data';
 
 const method = collation.meta.method
   .replace(/^opencc/i, 'OpenCC')
@@ -9,25 +9,33 @@ const method = collation.meta.method
   .replaceAll('齐', '齊')
   .replaceAll('标', '標')
   .replaceAll('参', '參');
+
+const rulings = [...new Set(collation.variants.map((v) => v.ruling))];
 ---
 
 <Base title="校勘記" current="collation" wide>
-  <header class="read-head">
-    <h1 class="read-title">校勘記</h1>
+  <header class="page-head">
+    <h1>校勘記</h1>
     <p>
-      底本為 CBETA T45n1876，對校維基文庫《修華嚴奧旨妄盡還源觀》。
-      對校方法：{method}。
-    </p>
-    <p class="collation-stats">
-      全文 {collation.stats.cbeta_chars} 字，錄異文 {collation.stats.variants} 處。
+      底本 CBETA T45n1876，對校<a href={collation.meta.url} rel="noopener">維基文庫本</a>。對校方法：{method}。
+      全文 {collation.stats.cbeta_chars} 字，錄異文 {collation.stats.variants} 處；閱讀頁原文以朱色圈點標出。
     </p>
   </header>
 
-  <div class="collation-wrap">
+  <div class="filter-bar">
+    <input class="filter-input" type="search" placeholder="篩選字形、備註或上下文" aria-label="篩選校勘" data-filter />
+    {rulings.map((r) => (
+      <button class="chip-toggle" type="button" data-filter-tag={r} aria-pressed="false">{r}</button>
+    ))}
+    <span class="filter-count" data-filter-count>{collation.variants.length} 條</span>
+  </div>
+
+  <div class="table-wrap">
     <table class="collation-table">
       <thead>
         <tr>
           <th scope="col">行號</th>
+          <th scope="col">段落</th>
           <th scope="col">底本</th>
           <th scope="col">對校本</th>
           <th scope="col">判定</th>
@@ -35,25 +43,19 @@ const method = collation.meta.method
         </tr>
       </thead>
       <tbody>
-        {collation.variants.map((variant) => {
-          const segmentId = lbToSegmentId(variant.lb);
+        {collation.variants.map((v, i) => {
+          const segId = lbToSegmentId(v.lb);
+          const seg = segId ? getSegment(segId) : undefined;
           return (
-            <tr>
+            <tr id={`v-${i}`} data-tag={v.ruling} data-filter-text={`${v.cbeta} ${v.wikisource} ${v.note} ${v.context} ${v.type}`}>
+              <td>{/^\d{4}[abc]\d{2}$/.test(v.lb) ? formatLb(v.lb) : '—'}</td>
+              <td>{seg ? <a href={`${base}/read/${seg.id}`}>{seg.id} {shortTitle(seg)}</a> : '—'}</td>
+              <td class="glyph">{v.cbeta || '—'}</td>
+              <td class="glyph">{v.wikisource || '—'}</td>
+              <td><span class:list={['ruling', { 'is-better': v.ruling === '底本勝' }]}>{v.ruling}</span></td>
               <td>
-                {segmentId ? (
-                  <a href={`${base}/read/${segmentId}`}>{formatLb(variant.lb)}</a>
-                ) : (
-                  formatLb(variant.lb)
-                )}
-              </td>
-              <td>{variant.cbeta || '—'}</td>
-              <td>{variant.wikisource || '—'}</td>
-              <td>{variant.ruling}</td>
-              <td>
-                {variant.note || '—'}
-                {variant.context && (
-                  <small class="variant-context">上下文：{variant.context}</small>
-                )}
+                {v.type !== '異文' && <>{v.type}。</>}{v.note || (v.type === '異文' ? '—' : '')}
+                {v.context && <small class="variant-context">上下文（維基本）：{v.context}</small>}
               </td>
             </tr>
           );
@@ -61,4 +63,9 @@ const method = collation.meta.method
       </tbody>
     </table>
   </div>
+  <p class="placeholder" data-filter-empty hidden>無相符條目。</p>
 </Base>
+
+<script>
+  import '../scripts/filter';
+</script>

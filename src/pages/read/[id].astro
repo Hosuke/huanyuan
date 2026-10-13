@@ -1,15 +1,20 @@
 ---
 import Base from '../../layouts/Base.astro';
-import SegmentText from '../../components/SegmentText.astro';
-import ReadToggle from '../../components/ReadToggle.astro';
+import AnnotatedText from '../../components/AnnotatedText.astro';
 import {
   base,
+  commentaryMeta,
   data,
   formatEpisodes,
   formatLb,
+  gates,
+  plainText,
   quotesBySegment,
   segments,
+  shortTitle,
   termsBySegment,
+  variantsBySegment,
+  type Commentary,
   type Segment,
 } from '../../lib/data';
 
@@ -31,8 +36,12 @@ interface Props {
 }
 
 const { seg, prev, next } = Astro.props as Props;
-const quotes = quotesBySegment(seg.id);
-const relatedTerms = termsBySegment(seg.id);
+const gate = gates.find((g) => g.part === seg.part);
+const quotes = quotesBySegment(seg.id).filter((q) => q.quote);
+const terms = termsBySegment(seg.id);
+const variants = variantsBySegment(seg.id);
+const plain = plainText(seg);
+const placed = (needle: string) => !!needle && plain.includes(needle);
 
 interface NotePoint {
   text: string;
@@ -45,247 +54,266 @@ interface ParsedNotes {
   caveat?: string;
 }
 
-/** 淨空講記須整體符合約定格式才結構化；任一異常皆安全回退。 */
-function parseJingkongNotes(notes: string): ParsedNotes | undefined {
-  try {
-    const normalized = notes.replace(/\r\n?/g, '\n').trim();
-    const blocks = normalized.split(/\n\s*\n/);
-    if (blocks.length < 2) return undefined;
-
-    const summary = blocks.shift()?.trim() ?? '';
-    if (!summary || summary.startsWith('· ')) return undefined;
-
-    const points: NotePoint[] = [];
-    let caveat: string | undefined;
-    const remainingLines = blocks.join('\n').split('\n').map((line) => line.trim()).filter(Boolean);
-
-    for (const line of remainingLines) {
-      if (line.startsWith('· ')) {
-        const match = /^·\s+(.+?)【([^【】]+)】$/.exec(line);
-        if (!match) return undefined;
-        points.push({ text: match[1], source: match[2] });
-        continue;
-      }
-      if (/^（整理(?:說明|说明)：.+）$/.test(line) && caveat === undefined) {
-        caveat = line;
-        continue;
-      }
-      return undefined;
+/** 講記摘要須整體符合約定格式才結構化；任一異常皆安全回退為純文字。 */
+function parseNotes(notes: string): ParsedNotes | undefined {
+  const blocks = notes.replace(/\r\n?/g, '\n').trim().split(/\n\s*\n/);
+  if (blocks.length < 2) return undefined;
+  const summary = blocks.shift()?.trim() ?? '';
+  if (!summary || summary.startsWith('· ')) return undefined;
+  const points: NotePoint[] = [];
+  let caveat: string | undefined;
+  for (const line of blocks.join('\n').split('\n').map((l) => l.trim()).filter(Boolean)) {
+    const m = /^·\s+(.+?)【([^【】]+)】$/.exec(line);
+    if (m) {
+      points.push({ text: m[1], source: m[2] });
+      continue;
     }
-
-    return points.length > 0 ? { summary, points, caveat } : undefined;
-  } catch {
+    const c = /^（整理(?:說明|说明)：(.+)）$/.exec(line);
+    if (c && caveat === undefined) {
+      caveat = c[1];
+      continue;
+    }
     return undefined;
   }
+  return points.length ? { summary, points, caveat } : undefined;
 }
 
-const parsedJingkong = parseJingkongNotes(seg.commentaries.jingkong.notes);
+/** 講記出處：淨空按檔名歸組；體佛講義記作 tifo-NNN。 */
+function episodesLabel(key: string, eps: string[]): string {
+  if (key === 'tifo') {
+    const nums = eps.map((e) => Number.parseInt(e.replace(/^tifo-/, ''), 10)).filter(Number.isFinite);
+    return `體佛法師《修華嚴奧旨妄盡還源觀》講義 第 ${nums.join('、')} 集`;
+  }
+  return formatEpisodes(eps);
+}
 
-const commentaries = [
-  { key: 'baihua', label: '白話' },
-  { key: 'tifo', label: '體佛法師' },
-  { key: 'jingkong', label: '淨空法師' },
-  { key: 'mengcan', label: '夢參法師' },
-] as const;
+const pendingNote: Record<string, string> = {
+  tifo: '體佛法師講義目前整理至第 1 集（題目與序分），其餘段落待後續集次。',
+  jingkong: '本段淨空法師講記摘要整理中。',
+  mengcan: '夢參老和尚未見本觀專講講記，擬以相關開示摘錄補入，整理中。',
+};
+
+const voices = commentaryMeta.map(({ key, label }) => {
+  const c: Commentary = seg.commentaries[key];
+  const ready = c.status !== 'pending' && !!c.notes;
+  return { key, label, c, ready, parsed: ready ? parseNotes(c.notes) : undefined };
+});
+
+const tabs = [
+  { key: 'baihua', label: '白話', ready: !!seg.translation, count: 0 },
+  ...voices.map((v) => ({ key: v.key, label: v.label, ready: v.ready, count: v.parsed?.points.length ?? 0 })),
+];
+
+const partSegs = data.parts.map((part) => ({
+  part,
+  name: gates.find((g) => g.part === part.part)?.full ?? part.name,
+  segs: segments.filter((s) => s.part === part.part),
+}));
 ---
 
-<Base title={`${seg.id} ${seg.title}`}>
-  <header class="read-head">
-    <p class="read-part">{seg.part_name}・{seg.id}</p>
-    <h1 class="read-title">{seg.title}</h1>
-    <p class="read-lb-range">
-      {data.cbeta} {formatLb(seg.start_lb)}–{formatLb(seg.end_lb)}
-    </p>
-  </header>
+<Base title={`${seg.id} ${seg.title}`} wide>
+  <div class="scroll-meter" aria-hidden="true"><span data-scroll-meter></span></div>
 
-  <SegmentText seg={seg} />
-
-  {quotes.length > 0 && (
-    <section class="reading-aside" aria-labelledby="quotes-head">
-      <h2 class="aside-head" id="quotes-head">本段徵引</h2>
-      {quotes.map((quote) => {
-        const identified = [
-          quote.identified.canon,
-          quote.identified.juan,
-          quote.identified.pin,
-          quote.identified.cbeta_ref,
-        ].filter(Boolean);
-        return (
-          <blockquote class="quote-item">
-            <p>{quote.quote}</p>
-            <cite>
-              《{quote.work}》
-              {quote.cited_as !== quote.work && <>（文中稱「{quote.cited_as}」）</>}
-            </cite>
-            {identified.length > 0 && <p class="quote-source">考據：{identified.join('・')}</p>}
-          </blockquote>
-        );
-      })}
-    </section>
-  )}
-
-  {relatedTerms.length > 0 && (
-    <section class="reading-aside" aria-labelledby="terms-head">
-      <h2 class="aside-head" id="terms-head">相關名相</h2>
-      <div class="side-links">
-        {relatedTerms.map((term) => (
-          <a class="side-chip" href={`${base}/dict#${term.id}`}>{term.term}</a>
-        ))}
-      </div>
-    </section>
-  )}
-
-  <section class="tabs">
-    <div class="tab-bar" role="tablist">
-      {commentaries.map((c, i) => (
-        <button
-          id={`tab-${c.key}`}
-          role="tab"
-          aria-controls={`panel-${c.key}`}
-          aria-selected={i === 0 ? 'true' : 'false'}
-          tabindex={i === 0 ? 0 : -1}
-          data-tab={c.key}
-        >
-          {c.label}
-        </button>
+  <div class="reader" data-reader data-id={seg.id} data-prev={prev?.id} data-next={next?.id}>
+    <nav class="toc" aria-label="全篇目次" data-toc>
+      <div class="toc-head"><span>目次</span><a href={`${base}/`}>總綱 ↗</a></div>
+      {partSegs.map(({ name, segs }) => (
+        <>
+          <div class="toc-part">{name}</div>
+          <ol>
+            {segs.map((s) => (
+              <li>
+                <a href={`${base}/read/${s.id}`} data-seg={s.id} aria-current={s.id === seg.id ? 'page' : undefined}>
+                  {shortTitle(s)}
+                  <span class="sc-dot" aria-hidden="true"></span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </>
       ))}
-    </div>
+    </nav>
 
-    <div
-      class="tab-panel"
-      id="panel-baihua"
-      data-panel="baihua"
-      role="tabpanel"
-      aria-labelledby="tab-baihua"
-    >
-      {seg.translation
-        ? (
-          <>
-            <p>{seg.translation}</p>
-            <p class="provenance">白話為本站試譯（AI 協助起草，未經審定），僅供學習參考。</p>
-          </>
-        )
-        : <p class="placeholder">整理中，敬請期待</p>}
-    </div>
-
-    {(['tifo', 'mengcan'] as const).map((key) => {
-      const c = seg.commentaries[key];
-      return (
-        <div
-          class="tab-panel"
-          id={`panel-${key}`}
-          data-panel={key}
-          role="tabpanel"
-          aria-labelledby={`tab-${key}`}
-          hidden
-        >
-          {c.status === 'pending'
-            ? <p class="placeholder">整理中，敬請期待</p>
-            : (
-              <>
-                {c.episodes.length > 0 && (
-                  <p class="eps">講記出處：{formatEpisodes(c.episodes)}</p>
-                )}
-                <div class="notes">{c.notes}</div>
-              </>
-            )}
+    <article class="reader-main">
+      <header class="read-head">
+        <p class="kicker">{gate ? gate.full : seg.part_name}・{seg.id}</p>
+        <h1>{seg.title}</h1>
+        <div class="read-meta">
+          <span class="lbr">{data.cbeta} {formatLb(seg.start_lb)}–{formatLb(seg.end_lb)}</span>
+          <span>{plain.length} 字</span>
+          <a href={`${base}/full#s-${seg.id}`}>於通讀中查看</a>
         </div>
-      );
-    })}
+      </header>
 
-    <div
-      class="tab-panel"
-      id="panel-jingkong"
-      data-panel="jingkong"
-      role="tabpanel"
-      aria-labelledby="tab-jingkong"
-      hidden
-    >
-      {seg.commentaries.jingkong.status === 'pending'
-        ? <p class="placeholder">整理中，敬請期待</p>
-        : (
-          <>
-            {seg.commentaries.jingkong.episodes.length > 0 && (
-              <p class="eps">講記出處：{formatEpisodes(seg.commentaries.jingkong.episodes)}</p>
-            )}
-            {parsedJingkong
-              ? (
-                <div class="notes-structured">
-                  <p class="notes-summary">{parsedJingkong.summary}</p>
-                  <ul class="points">
-                    {parsedJingkong.points.map((point) => (
-                      <li>{point.text}<span class="src">{point.source}</span></li>
-                    ))}
-                  </ul>
-                  {parsedJingkong.caveat && <p class="caveat">{parsedJingkong.caveat}</p>}
-                </div>
-              )
-              : <div class="notes">{seg.commentaries.jingkong.notes}</div>}
-          </>
+      <div class="reading-tools">
+        <button class="chip-toggle toc-toggle" type="button" data-toc-toggle aria-expanded="false">☰ 目次</button>
+        <button class="chip-toggle" type="button" data-toggle-pref="parallel:on:off" aria-pressed="false">白話並列</button>
+        <button class="chip-toggle" type="button" data-toggle-pref="writing:v:h" aria-pressed="false">直排</button>
+        <button class="chip-toggle" type="button" data-toggle-pref="lb:on:off" aria-pressed="false">行號</button>
+        <span class="legend-inline" aria-hidden="true">
+          {terms.length > 0 && <span class="lg-term">名相</span>}
+          {quotes.length > 0 && <span class="lg-quote">徵引</span>}
+          {variants.length > 0 && <span class="lg-var">校勘</span>}
+        </span>
+      </div>
+
+      <div class="text-stage">
+        <section class="parallel-col" aria-label="原文">
+          <h2 class="visually-hidden">原文</h2>
+          <div class="sutra-wrap" data-sutra-wrap>
+            <AnnotatedText seg={seg} />
+          </div>
+        </section>
+        <section class="parallel-col parallel-only" aria-label="白話並列">
+          <h2>白話試譯</h2>
+          <p class="translation">{seg.translation}</p>
+        </section>
+      </div>
+
+      <section class="commentary" id="commentary" aria-label="白話與講記">
+        <div class="tab-bar" role="tablist">
+          {tabs.map((t) => (
+            <button
+              id={`tab-${t.key}`}
+              type="button"
+              role="tab"
+              class:list={{ 'is-empty': !t.ready }}
+              aria-controls={`panel-${t.key}`}
+              aria-selected="false"
+              tabindex="-1"
+              data-tab={t.key}
+            >
+              {t.label}
+              {t.count > 0 && <span class="badge">{t.count}</span>}
+            </button>
+          ))}
+        </div>
+
+        <div class="tab-panel" id="panel-baihua" role="tabpanel" aria-labelledby="tab-baihua" data-panel="baihua" hidden>
+          {seg.translation
+            ? (
+              <>
+                <p class="translation translation-panel">{seg.translation}</p>
+                <p class="provenance">白話為本站試譯（AI 協助起草，未經法師審定），僅供學習參考。</p>
+              </>
+            )
+            : <p class="placeholder">白話整理中。</p>}
+        </div>
+
+        {voices.map((v) => (
+          <div class="tab-panel" id={`panel-${v.key}`} role="tabpanel" aria-labelledby={`tab-${v.key}`} data-panel={v.key} hidden>
+            {!v.ready
+              ? <p class="placeholder">{pendingNote[v.key]}</p>
+              : (
+                <>
+                  {v.c.episodes.length > 0 && <p class="eps">出處：{episodesLabel(v.key, v.c.episodes)}</p>}
+                  {v.parsed
+                    ? (
+                      <div class="notes-structured">
+                        <p class="notes-summary">{v.parsed.summary}</p>
+                        <ol class="points">
+                          {v.parsed.points.map((pt) => (
+                            <li>{pt.text}<span class="src">{pt.source}</span></li>
+                          ))}
+                        </ol>
+                        {v.parsed.caveat && <p class="caveat">整理說明：{v.parsed.caveat}</p>}
+                      </div>
+                    )
+                    : <div class="notes">{v.c.notes}</div>}
+                  <p class="provenance">講記為本站學習摘要，非講者原文；完整內容請參原講。</p>
+                </>
+              )}
+          </div>
+        ))}
+      </section>
+
+      <div class="read-end">
+        <button class="btn-read" type="button" data-read-toggle aria-pressed="false">標記已讀</button>
+      </div>
+
+      <nav class="pager" aria-label="上下段">
+        {prev && (
+          <a class="prev" href={`${base}/read/${prev.id}`} rel="prev">
+            <span class="dir">← 上一段・{prev.id}</span>{prev.title}
+          </a>
         )}
-    </div>
-  </section>
+        {next && (
+          <a class="next" href={`${base}/read/${next.id}`} rel="next">
+            <span class="dir">下一段・{next.id} →</span>{next.title}
+          </a>
+        )}
+      </nav>
+    </article>
 
-  <div style="margin-top: 2.5rem; text-align: center;">
-    <ReadToggle id={seg.id} />
+    <aside class="margin" aria-label="本段旁註">
+      <div class="margin-grid">
+        {terms.length > 0 && (
+          <section class="margin-sec">
+            <h2>名相 <a href={`${base}/dict`}>詞典</a></h2>
+            {terms.map((t) => (
+              <div class="note-card term" id={`n-term-${t.id}`} data-card-term={t.id} tabindex="0">
+                <span class="nc-title">{t.term}</span>
+                <span class="nc-sub">{t.pinyin}</span>
+                <span class="nc-body">{t.def}</span>
+                {!placed(t.term) && <span class="unplaced">（本段未直出此詞）</span>}
+                <a class="pop-link" href={`${base}/dict#${t.id}`} hidden>詞典條目 →</a>
+              </div>
+            ))}
+          </section>
+        )}
+
+        {quotes.length > 0 && (
+          <section class="margin-sec">
+            <h2>徵引</h2>
+            {quotes.map((q) => {
+              const identified = [q.identified.canon, q.identified.juan, q.identified.pin, q.identified.cbeta_ref].filter(Boolean);
+              return (
+                <div class="note-card quote" id={`n-quote-${q.id}`} data-card-quote={q.id} tabindex="0">
+                  <span class="nc-title">《{q.work}》</span>
+                  <span class="nc-sub">
+                    {q.cited_as !== q.work ? `文中稱「${q.cited_as}」` : '文中直引'}
+                    {identified.length > 0 ? `・${identified.join('・')}` : '・出處待考'}
+                  </span>
+                  <span class="nc-body">{q.quote.length > 60 ? `${q.quote.slice(0, 60)}……` : q.quote}</span>
+                </div>
+              );
+            })}
+          </section>
+        )}
+
+        {variants.length > 0 && (
+          <section class="margin-sec">
+            <h2>校勘 <a href={`${base}/collation`}>全表</a></h2>
+            {variants.map(({ index, variant }) => (
+              <div class="note-card variant" id={`n-var-${index}`} data-card-variant={index} tabindex="0">
+                <span class="nc-title">
+                  {variant.cbeta || '（無）'} ／ {variant.wikisource || '（無）'}
+                </span>
+                <span class="nc-sub">{formatLb(variant.lb)}・底本／維基文庫本・{variant.ruling}</span>
+                {variant.note && <span class="nc-body">{variant.note}</span>}
+                <a class="pop-link" href={`${base}/collation#v-${index}`} hidden>校勘記 →</a>
+              </div>
+            ))}
+          </section>
+        )}
+
+        {terms.length + quotes.length + variants.length === 0 && (
+          <section class="margin-sec">
+            <h2>旁註</h2>
+            <p class="muted" style="font-size: 0.82rem;">本段暫無名相、徵引與校勘條目。</p>
+          </section>
+        )}
+      </div>
+    </aside>
   </div>
 
-  <nav class="read-nav">
-    <span>
-      {prev && <a href={`${base}/read/${prev.id}`}>← {prev.title}</a>}
-    </span>
-    <a href={base}>返回總綱</a>
-    <span>
-      {next && <a href={`${base}/read/${next.id}`}>{next.title} →</a>}
-    </span>
-  </nav>
+  <div class="pop" role="dialog" aria-modal="false" data-pop hidden>
+    <button class="pop-close" type="button" aria-label="關閉" data-pop-close>×</button>
+    <div class="pop-kind" data-pop-kind></div>
+    <div data-pop-body></div>
+  </div>
 </Base>
 
 <script>
-  const STORAGE_KEY = 'wjhy-tab';
-  const allowedTabs = new Set(['baihua', 'tifo', 'jingkong', 'mengcan']);
-  const tabs = document.querySelectorAll<HTMLButtonElement>('[role="tab"]');
-  const panels = document.querySelectorAll<HTMLElement>('[data-panel]');
-
-  function activate(tab: HTMLButtonElement, moveFocus = false) {
-    const key = tab.dataset.tab;
-    if (!key || !allowedTabs.has(key)) return;
-
-    tabs.forEach((item) => {
-      const selected = item === tab;
-      item.setAttribute('aria-selected', String(selected));
-      item.tabIndex = selected ? 0 : -1;
-    });
-    panels.forEach((panel) => {
-      panel.hidden = panel.dataset.panel !== key;
-    });
-    try {
-      localStorage.setItem(STORAGE_KEY, key);
-    } catch {
-      /* 瀏覽器禁用儲存時仍可正常切換。 */
-    }
-    if (moveFocus) tab.focus();
-  }
-
-  tabs.forEach((tab, index) => {
-    tab.addEventListener('click', () => activate(tab));
-    tab.addEventListener('keydown', (event) => {
-      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-      event.preventDefault();
-      const offset = event.key === 'ArrowRight' ? 1 : -1;
-      const nextIndex = (index + offset + tabs.length) % tabs.length;
-      const nextTab = tabs.item(nextIndex);
-      if (nextTab) activate(nextTab, true);
-    });
-  });
-
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved && allowedTabs.has(saved)) {
-      const savedTab = Array.from(tabs).find((tab) => tab.dataset.tab === saved);
-      if (savedTab) activate(savedTab);
-    }
-  } catch {
-    /* 損壞或不可用的 localStorage 不影響預設白話頁籤。 */
-  }
+  import '../../scripts/reader';
 </script>

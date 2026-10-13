@@ -1,0 +1,30 @@
+---
+import { annotate } from '../lib/annotate';
+import { formatLb, quotesBySegment, termsBySegment, variantsBySegment, type Segment } from '../lib/data';
+
+interface Props {
+  seg: Segment;
+  /** 通讀頁不做互動標注，只保留行號 */
+  plain?: boolean;
+}
+
+const { seg, plain = false } = Astro.props;
+const pieces = plain
+  ? annotate(seg, [], [], [])
+  : annotate(seg, termsBySegment(seg.id), quotesBySegment(seg.id), variantsBySegment(seg.id));
+---
+
+<p class="sutra" lang="zh-Hant">{pieces.map((p) => {
+  if (p.kind === 'lb') return <span class="lb" title={`大正藏 ${formatLb(p.lb)}`}>{formatLb(p.lb).slice(2)}</span>;
+  if (!p.term && !p.quote && p.variant === undefined) return p.text;
+  return (
+    <span
+      class:list={['mk', { 'mk-t': p.term, 'mk-q': p.quote, 'mk-v': p.variant !== undefined }]}
+      data-term={p.term}
+      data-quote={p.quote}
+      data-variant={p.variant}
+      tabindex="0"
+      role="button"
+    >{p.text}</span>
+  );
+})}</p>

@@ -1,0 +1,162 @@
+---
+import {
+  base,
+  commentaryMeta,
+  excerpt,
+  formatLb,
+  gates,
+  getSegment,
+  plainText,
+  quotesBySegment,
+  shortTitle,
+  termsBySegment,
+} from '../lib/data';
+
+/**
+ * 六門法界圖：一體居中，二用至六觀依次為外環。
+ * 節點角度經離線搜尋排布，使相鄰環的標籤互不重疊，並在各環正上方留出環名位置。
+ */
+const SIZE = 900;
+const C = SIZE / 2;
+const RADII = [100, 172, 244, 316, 388];
+const OFFSETS = [72, 48, 36, 30, 24];
+const PILL_W = 80;
+const PILL_H = 48;
+
+interface MNode {
+  id: string;
+  part: number;
+  x: number;
+  y: number;
+  lines: [string, string];
+}
+
+const rings = gates.slice(1).map((gate, ri) => ({ gate, r: RADII[ri], offset: OFFSETS[ri] }));
+const nodes: MNode[] = rings.flatMap(({ gate, r, offset }) =>
+  gate.ids.map((id, i) => {
+    const seg = getSegment(id)!;
+    const label = shortTitle(seg);
+    const a = ((-90 + offset + (360 / gate.ids.length) * i) * Math.PI) / 180;
+    return {
+      id,
+      part: gate.part,
+      x: C + r * Math.cos(a),
+      y: C + r * Math.sin(a),
+      lines: [label.slice(0, 4), label.slice(4)] as [string, string],
+    };
+  }),
+);
+
+const core = getSegment('1.0')!;
+const peekIds = gates.flatMap((g) => g.ids);
+const peeks = peekIds.map((id) => {
+  const seg = getSegment(id)!;
+  const gate = gates.find((g) => g.part === seg.part)!;
+  const voices = commentaryMeta.filter(({ key }) => seg.commentaries[key].status !== 'pending').map((c) => c.label);
+  return {
+    id,
+    gate,
+    seg,
+    title: shortTitle(seg),
+    orig: excerpt(plainText(seg), 64),
+    trans: excerpt(seg.translation, 92),
+    lbRange: `${formatLb(seg.start_lb)}–${formatLb(seg.end_lb)}`,
+    meta: [
+      voices.length ? `講記：${voices.join('、')}` : '',
+      termsBySegment(id).length ? `名相 ${termsBySegment(id).length}` : '',
+      quotesBySegment(id).length ? `徵引 ${quotesBySegment(id).length}` : '',
+    ].filter(Boolean).join('・'),
+  };
+});
+---
+
+<div class="mandala" data-mandala>
+  <figure class="mandala-figure">
+    <svg viewBox={`0 0 ${SIZE} ${SIZE}`} role="group" aria-label="六門法界圖：一體居中，外環依次為二用、三遍、四德、五止、六觀">
+      {rings.map(({ gate, r }) => (
+        <circle class="ring" cx={C} cy={C} r={r} data-ring={gate.part} />
+      ))}
+      {nodes.map((n) => (
+        <line class="spoke" x1={C} y1={C} x2={n.x} y2={n.y} data-spoke={n.id} />
+      ))}
+      {rings.map(({ gate, r }) => (
+        <text class="ring-label" x={C} y={C - r + 4.5}>{gate.name}</text>
+      ))}
+
+      <a class="m-node m-core" href={`${base}/read/1.0`} data-node="1.0" data-seg="1.0" aria-label={`一體・${core.title}`}>
+        <circle class="core-halo" cx={C} cy={C} r="58" />
+        <circle class="core-disc" cx={C} cy={C} r="44" />
+        <text x={C} y={C - 4}>自性清淨</text>
+        <text x={C} y={C + 16}>圓明體</text>
+        <circle class="dot" cx={C + 28} cy={C - 28} r="4" />
+      </a>
+
+      {nodes.map((n) => (
+        <a class="m-node" href={`${base}/read/${n.id}`} data-node={n.id} data-part={n.part} data-seg={n.id} aria-label={`${getSegment(n.id)!.title}`}>
+          <rect class="pill" x={n.x - PILL_W / 2} y={n.y - PILL_H / 2} width={PILL_W} height={PILL_H} rx="10" />
+          <circle class="knob" cx={n.x} cy={n.y} r="16" />
+          <text x={n.x} y={n.y - 3}>{n.lines[0]}</text>
+          <text x={n.x} y={n.y + 16}>{n.lines[1]}</text>
+          <circle class="dot" cx={n.x + PILL_W / 2 - 7} cy={n.y - PILL_H / 2 + 7} r="3.5" />
+        </a>
+      ))}
+    </svg>
+    <figcaption class="mandala-caption">一體居中，外環依次為二用、三遍、四德、五止、六觀。懸停或聚焦預覽，點擊入讀。</figcaption>
+  </figure>
+
+  <aside class="peek" aria-live="polite" data-peek>
+    {peeks.map((p, i) => (
+      <div data-peek-id={p.id} hidden={i !== 0}>
+        <p class="peek-gate">{p.gate.full}・{p.id}</p>
+        <h3>{p.title}</h3>
+        <span class="lb-range">{p.lbRange}</span>
+        <p class="peek-orig">{p.orig}</p>
+        <p class="peek-trans">{p.trans}</p>
+        <div class="peek-foot">
+          <span class="peek-meta">{p.meta}</span>
+          <a class="btn primary" href={`${base}/read/${p.id}`}>入讀 →</a>
+        </div>
+      </div>
+    ))}
+  </aside>
+</div>
+
+<script>
+  import { paintRead } from '../scripts/store';
+
+  const root = document.querySelector<HTMLElement>('[data-mandala]');
+  if (root) {
+    const nodes = root.querySelectorAll<SVGAElement>('[data-node]');
+    const panes = root.querySelectorAll<HTMLElement>('[data-peek-id]');
+    let current = '1.0';
+    let lastPointer = 'mouse';
+
+    const show = (id: string) => {
+      current = id;
+      nodes.forEach((n) => n.classList.toggle('is-active', n.dataset.node === id));
+      panes.forEach((p) => (p.hidden = p.dataset.peekId !== id));
+      root.querySelectorAll<SVGElement>('[data-spoke]').forEach((s) => s.classList.toggle('is-active', s.dataset.spoke === id));
+      const part = root.querySelector<SVGElement>(`[data-node="${id}"]`)?.dataset.part;
+      root.querySelectorAll<SVGElement>('[data-ring]').forEach((r) => r.classList.toggle('is-active', r.dataset.ring === part));
+    };
+
+    nodes.forEach((n) => {
+      const id = n.dataset.node!;
+      n.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && show(id));
+      n.addEventListener('focus', () => n.matches(':focus-visible') && show(id));
+      n.addEventListener('pointerdown', (e) => (lastPointer = e.pointerType));
+      // 觸控：第一下預覽，第二下入讀。
+      n.addEventListener('click', (e) => {
+        if (lastPointer === 'touch' && current !== id) {
+          e.preventDefault();
+          show(id);
+          root.querySelector('[data-peek]')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+    });
+
+    show('1.0');
+    paintRead(root);
+    window.addEventListener('pageshow', () => paintRead(root));
+  }
+</script>

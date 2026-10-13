@@ -10,15 +10,19 @@ data/
     segments.json    #   29 段原文（含大正藏行號錨點、講記佔位）
   dict/
     terms.json       # 名相詞條（id/term/pinyin/def/refs）
+  jingkong/summaries # 淨空法師講記摘要（逐段 JSON）
+  tifo/summaries     # 體佛法師講義摘要（逐段 JSON；講義 OCR 原文存本機 data/sources/tifo/，不入庫）
   source/            # CBETA XML 原始來源（資料管線輸入）
 tools/
   extract_cbeta.py   # 從 CBETA XML 抽取原文
   build_segments.py  # 依六門結構分段建模，產出 segments.json
 src/
   layouts/Base.astro
-  components/        # OutlineTree（總綱圖）、SegmentText、ReadToggle
-  pages/             # /、/read/[id]、/dict、/about
-  lib/data.ts        # JSON 載入與行號、分段工具函式
+  components/        # Mandala（六門法界圖）、AnnotatedText（原文就地標注名相／徵引／校勘）
+  pages/             # /、/read/[id]、/full（通讀）、/dict、/collation、/about、/search.json（搜尋索引）
+  scripts/           # site（設定、搜尋、快捷鍵）、reader（閱讀頁互動）、store（本機儲存）、filter
+  lib/data.ts        # JSON 載入、六門總綱、行號與分段工具
+  lib/annotate.ts    # 原文切片標注
 ```
 
 ## 資料管線
@@ -26,7 +30,7 @@ src/
 原文更新或重跑分段時：
 
 ```bash
-python3 tools/extract_cbeta.py && python3 tools/build_segments.py && python3 tools/merge_jingkong.py && python3 tools/merge_translations.py
+python3 tools/extract_cbeta.py && python3 tools/build_segments.py && python3 tools/merge_jingkong.py && python3 tools/merge_translations.py && .venv/bin/python tools/build_s2t.py
 ```
 
 產出 `data/original/segments.json`，Astro 端以相對路徑直接 import JSON，無額外建置步驟。
@@ -44,5 +48,7 @@ npm run preview  # 預覽建置結果
 
 - Astro（minimal、strict TypeScript），純 `.astro` 元件 + 少量原生 `<script>`，無 UI 框架、無其他執行期依賴。
 - 手寫 CSS：宣紙米白底、墨色正文、朱砂/赭石點綴，宋體字栈，繁體中文。
-- 「已讀」標記存於瀏覽器 localStorage（key：`wjhy-read`），首頁總綱圖與閱讀頁共用。
-- 原文中的【0637a06】行號錨點於渲染時轉為右側灰色小字（T.637a06）。
+- 本機儲存（localStorage）：`wjhy-read` 已讀、`wjhy-last` 上次閱讀、`wjhy-tab` 講記頁籤、`wjhy-prefs` 閱讀偏好（主題、字號、直排、行號、白話並列）。
+- 原文中的【0637a06】行號錨點渲染為行內小字；名相（綠虛線）、徵引（赭底）、校勘（朱圈點）就地標注，點擊浮出註卡，與右側旁註雙向聯動。
+- 搜尋索引 `/search.json` 構建期產出、首次開啟搜尋才載入；`merge_jingkong.py` 同時合併淨空、體佛兩家摘要，`build_s2t.py` 產出簡→繁字表供搜尋。
+- 快捷鍵：`/` 或 ⌘K 搜尋，`←` `→` 上下段，`Esc` 關閉。
