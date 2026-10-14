@@ -52,3 +52,17 @@ npm run preview  # 預覽建置結果
 - 原文中的【0637a06】行號錨點渲染為行內小字；名相（綠虛線）、徵引（赭底）、校勘（朱圈點）就地標注，點擊浮出註卡，與右側旁註雙向聯動。
 - 搜尋索引 `/search.json` 構建期產出、首次開啟搜尋才載入；`merge_jingkong.py` 同時合併淨空、體佛兩家摘要，`build_s2t.py` 產出簡→繁字表供搜尋。
 - 快捷鍵：`/` 或 ⌘K 搜尋，`←` `→` 上下段，`Esc` 關閉。
+
+## 正本網址（2026-10-14 起）
+
+正本在 **https://taixu.ink/huanyuan/**（太虛間 R2＋Worker 供網）；GitHub Pages（hosuke.github.io/huanyuan）為鏡，各頁 canonical 皆指太虛間。
+
+部署至太虛間：
+
+```bash
+npm run build
+T=$(mktemp -d) && cp -R dist "$T/huanyuan"
+~/Developer/Buddha/Github/siwen/.venv/bin/python ~/Developer/Buddha/Github/siwen/scripts/r2_sync.py "$T" taixu-site
+```
+
+只增不刪；回退則於 R2 刪 `huanyuan/` 前綴之物件即可，不及太虛間他檔。
