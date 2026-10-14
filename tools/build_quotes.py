@@ -81,7 +81,7 @@ def main():
                 continue
             for field in ("identified", "status"):
                 quote[field] = source[field]
-            for field in ("note", "taixu"):
+            for field in ("note", "taixu", "taixu_hl"):
                 if source.get(field):
                     quote[field] = source[field]
             if "work" in source:

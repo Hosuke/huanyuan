@@ -17,7 +17,8 @@
    },
    "status": "identified",
    "note": "法藏節引「真如自體相」一段，原文作「所謂自體有大智慧光明義故……」。",
-   "taixu": "cbeta-T-T32n1666-大乘起信論"
+   "taixu": "cbeta-T-T32n1666-大乘起信論",
+   "taixu_hl": "大智慧光明義故遍"
   },
   {
    "id": "q02",
@@ -33,7 +34,8 @@
    },
    "status": "identified",
    "note": "出卷首歸敬偈，原句次序為「法性真如海，無量功德藏」，此處前後互倒。",
-   "taixu": "cbeta-T-T32n1666-大乘起信論"
+   "taixu": "cbeta-T-T32n1666-大乘起信論",
+   "taixu_hl": "法性真如海"
   },
   {
    "id": "q03",
@@ -64,7 +66,8 @@
    },
    "status": "identified",
    "note": "八十卷本文字全同。",
-   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經"
+   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經",
+   "taixu_hl": "或現童男童女形"
   },
   {
    "id": "q05",
@@ -80,7 +83,8 @@
    },
    "status": "paraphrase",
    "note": "綴合兩段頌文：前四句見 p0073c29，「施戒忍進及禪定」以下見 p0074a04，中間略去「智慧自在不思議」等句。",
-   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經"
+   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經",
+   "taixu_hl": "嚴淨不可思議剎"
   },
   {
    "id": "q06",
@@ -96,7 +100,8 @@
    },
    "status": "identified",
    "note": "八十卷本文字全同。",
-   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經"
+   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經",
+   "taixu_hl": "一一塵中見法界"
   },
   {
    "id": "q07",
@@ -112,7 +117,8 @@
    },
    "status": "paraphrase",
    "note": "節引：原文作「常樂我淨義故，清涼不變自在義故，具足如是過於恒沙不離、不斷、不異、不思議佛法，乃至滿足無有所少義故」。",
-   "taixu": "cbeta-T-T32n1666-大乘起信論"
+   "taixu": "cbeta-T-T32n1666-大乘起信論",
+   "taixu_hl": "清涼不變自在義"
   },
   {
    "id": "q08",
@@ -143,7 +149,8 @@
    },
    "status": "identified",
    "note": "八十卷本文字全同。",
-   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經"
+   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經",
+   "taixu_hl": "同會一法道場中"
   },
   {
    "id": "q10",
@@ -159,7 +166,8 @@
    },
    "status": "paraphrase",
    "note": "上句「一切法門無盡海」見同品 p0006b10；下句「一言演說盡無餘」見 p0007b25，原作「佛剎微塵法門海，一言演說盡無餘」。六十卷本卷8（T09n0278 p0447b06）亦有「一言演說盡無餘」。",
-   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經"
+   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經",
+   "taixu_hl": "一言演說盡無餘"
   },
   {
    "id": "q11",
@@ -190,7 +198,8 @@
    },
    "status": "identified",
    "note": "出如來出現品偈頌。八十卷本作「一切塵悉然」「淨眼悉明見」「普饒益眾生」，與此小異；同品長行喻見 p0272c07。",
-   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經"
+   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經",
+   "taixu_hl": "量等三千界"
   },
   {
    "id": "q13",
@@ -221,7 +230,8 @@
    },
    "status": "paraphrase",
    "note": "原頌作「非太沈太浮，恒善住正念，根本眷屬淨，而修行梵行」；同卷 p0368b20 有釋。",
-   "taixu": "cbeta-T-T30n1579-瑜伽師地論"
+   "taixu": "cbeta-T-T30n1579-瑜伽師地論",
+   "taixu_hl": "根本眷屬淨"
   },
   {
    "id": "q15",
@@ -237,7 +247,8 @@
    },
    "status": "identified",
    "note": "出六十卷本賢首菩薩品，八十卷本未見同句。",
-   "taixu": "cbeta-T-T09n0278-大方廣佛華嚴經"
+   "taixu": "cbeta-T-T09n0278-大方廣佛華嚴經",
+   "taixu_hl": "戒是無上菩提本"
   },
   {
    "id": "q16",
@@ -253,7 +264,8 @@
    },
    "status": "identified",
    "note": "出卷下偈頌。",
-   "taixu": "cbeta-T-T24n1484-梵網經卷002"
+   "taixu": "cbeta-T-T24n1484-梵網經卷002",
+   "taixu_hl": "微塵菩薩眾"
   },
   {
    "id": "q17",
@@ -269,7 +281,8 @@
    },
    "status": "paraphrase",
    "note": "綴合兩處：「以知法性……隨順修行尸波羅蜜」見 p0581a21（原作「以知法性無染，離五欲過故」）；「所謂不殺、不盜……不得輕於如來所制禁戒」見修行信心分戒門，至 p0581c27。",
-   "taixu": "cbeta-T-T32n1666-大乘起信論"
+   "taixu": "cbeta-T-T32n1666-大乘起信論",
+   "taixu_hl": "隨順修行尸波羅蜜"
   },
   {
    "id": "q18",
@@ -300,7 +313,8 @@
    },
    "status": "paraphrase",
    "note": "原偈作「第一持戒不毀壞，比丘威儀自端身；怨家不能如法呵，彼能得是他無語」，此處文字有異。",
-   "taixu": "cbeta-T-T22n1428-四分律"
+   "taixu": "cbeta-T-T22n1428-四分律",
+   "taixu_hl": "第一持戒不毀壞"
   },
   {
    "id": "q20",
@@ -316,7 +330,8 @@
    },
    "status": "identified",
    "note": "八十卷本文字全同。",
-   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經"
+   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經",
+   "taixu_hl": "廣大悲雲遍一切"
   },
   {
    "id": "q21",
@@ -332,7 +347,8 @@
    },
    "status": "identified",
    "note": "論中引經頌以釋「轉變祕密」；原作「極煩惱所惱」，此作「離煩惱所惱」。",
-   "taixu": "cbeta-T-T31n1606-大乘阿毘達磨雜集論"
+   "taixu": "cbeta-T-T31n1606-大乘阿毘達磨雜集論",
+   "taixu_hl": "於不堅堅覺"
   },
   {
    "id": "q22",
@@ -348,7 +364,8 @@
    },
    "status": "identified",
    "note": "八十卷本文字全同。",
-   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經"
+   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經",
+   "taixu_hl": "其量等虛空"
   },
   {
    "id": "q23",
@@ -379,7 +396,8 @@
    },
    "status": "identified",
    "note": "論中本稱「修多羅說」。",
-   "taixu": "cbeta-T-T32n1666-大乘起信論"
+   "taixu": "cbeta-T-T32n1666-大乘起信論",
+   "taixu_hl": "能觀無念者"
   },
   {
    "id": "q25",
@@ -395,7 +413,8 @@
    },
    "status": "identified",
    "note": "出弟子品，維摩詰為目連說法。",
-   "taixu": "cbeta-T-T14n0475-維摩詰所說經卷001"
+   "taixu": "cbeta-T-T14n0475-維摩詰所說經卷001",
+   "taixu_hl": "法不屬因"
   },
   {
    "id": "q26",
@@ -411,7 +430,8 @@
    },
    "status": "identified",
    "note": "文稱「經」，實出《維摩詰所說經》，原作「從無住本，立一切法」。",
-   "taixu": "cbeta-T-T14n0475-維摩詰所說經卷002"
+   "taixu": "cbeta-T-T14n0475-維摩詰所說經卷002",
+   "taixu_hl": "從無住本"
   },
   {
    "id": "q27",
@@ -427,7 +447,8 @@
    },
    "status": "identified",
    "note": "八十卷本文字全同；六十卷本作「彼無所從來」。",
-   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經"
+   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經",
+   "taixu_hl": "成就勝七寶"
   },
   {
    "id": "q28",
@@ -443,7 +464,8 @@
    },
    "status": "identified",
    "note": "原文作「狹劣心過」。",
-   "taixu": "cbeta-T-T32n1666-大乘起信論"
+   "taixu": "cbeta-T-T32n1666-大乘起信論",
+   "taixu_hl": "對治凡夫住著世間"
   },
   {
    "id": "q29",
@@ -459,7 +481,8 @@
    },
    "status": "paraphrase",
    "note": "概述其義：原文作「譬如金翅鳥王，飛行虛空……以左右翅鼓揚海水悉令兩闢」；六十卷本卷35（T09n0278 p0626b01）同喻。",
-   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經"
+   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經",
+   "taixu_hl": "以左右翅鼓揚海水"
   },
   {
    "id": "q30",
@@ -474,7 +497,8 @@
     "cbeta_ref": "T32n1666_p0582a16"
    },
    "status": "identified",
-   "taixu": "cbeta-T-T32n1666-大乘起信論"
+   "taixu": "cbeta-T-T32n1666-大乘起信論",
+   "taixu_hl": "住於靜處端坐正意"
   },
   {
    "id": "q31",
@@ -535,7 +559,8 @@
    },
    "status": "identified",
    "note": "原作「一毛孔內無量剎，各有四洲及大海……悉見在中無迫隘」，此處小異。",
-   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經"
+   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經",
+   "taixu_hl": "一毛孔內無量剎"
   },
   {
    "id": "q35",
@@ -551,7 +576,8 @@
    },
    "status": "identified",
    "note": "原作「一切國土所有塵」。",
-   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經"
+   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經",
+   "taixu_hl": "一一塵中佛皆入"
   },
   {
    "id": "q36",
@@ -582,7 +608,8 @@
    },
    "status": "paraphrase",
    "note": "十地品第八地「十身」之說，原文是長行列舉，八十卷本作「獨覺身」，六十卷本卷26（T09n0278 p0565b21）作「辟支佛身」；「隨舉一身攝餘九身」是法藏的解釋語。",
-   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經"
+   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經",
+   "taixu_hl": "業報身聲聞身"
   },
   {
    "id": "q38",
@@ -598,7 +625,8 @@
    },
    "status": "paraphrase",
    "note": "節引十定品之喻，原文作「或以一身作多身，或以多身作一身，非一身沒多身生，非多身沒一身生」。",
-   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經"
+   "taixu": "cbeta-T-T10n0279-大方廣佛華嚴經",
+   "taixu_hl": "或以一身作多身"
   }
  ]
 }

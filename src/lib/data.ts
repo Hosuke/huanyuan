@@ -2,6 +2,7 @@ import segmentsJson from '../../data/original/segments.json';
 import termsJson from '../../data/dict/terms.json';
 import quotesJson from '../../data/original/quotes.json';
 import collationJson from '../../data/original/collation.json';
+import taixuAnchorsJson from '../../data/original/taixu_anchors.json';
 
 export interface Part {
   part: number;
@@ -64,14 +65,23 @@ export interface Quote {
   status: 'pending' | 'identified' | 'paraphrase' | 'unlocated' | 'general';
   note?: string;
   taixu?: string;
+  taixu_hl?: string;
 }
 
 export function cbetaUrl(ref: string): string {
   return `https://cbetaonline.dila.edu.tw/zh/${ref}`;
 }
 
-export function taixuUrl(slug: string): string {
-  return `https://taixu.ink/classics/${encodeURIComponent(slug)}/`;
+export function taixuUrl(slug: string, hl?: string): string {
+  return `https://taixu.ink/classics/${encodeURIComponent(slug)}/` +
+    (hl ? `?hl=${encodeURIComponent(hl)}` : '');
+}
+
+const taixuAnchors: { work: string; segments: Record<string, string> } = taixuAnchorsJson;
+
+export function taixuSegmentUrl(id: string): string | null {
+  const fragment = taixuAnchors.segments[id];
+  return fragment ? taixuUrl(taixuAnchors.work, fragment) : null;
 }
 
 export function formatCbetaRef(ref: string): string {

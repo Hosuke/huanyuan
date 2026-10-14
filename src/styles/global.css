@@ -1671,6 +1671,10 @@ main {
   text-decoration: underline;
 }
 
+.src-link.primary {
+  font-weight: 600;
+}
+
 .note-card.term .nc-title {
   color: var(--jade);
 }

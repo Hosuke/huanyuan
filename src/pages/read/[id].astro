@@ -14,6 +14,7 @@ import {
   quotesBySegment,
   segments,
   shortTitle,
+  taixuSegmentUrl,
   taixuUrl,
   termsBySegment,
   variantsBySegment,
@@ -44,6 +45,7 @@ const quotes = quotesBySegment(seg.id);
 const terms = termsBySegment(seg.id);
 const variants = variantsBySegment(seg.id);
 const plain = plainText(seg);
+const originalUrl = taixuSegmentUrl(seg.id);
 const placed = (needle: string) => !!needle && plain.includes(needle);
 
 interface NotePoint {
@@ -145,6 +147,7 @@ const partSegs = data.parts.map((part) => ({
           <span class="lbr">{data.cbeta} {formatLb(seg.start_lb)}–{formatLb(seg.end_lb)}</span>
           <span>{plain.length} 字</span>
           <a href={`${base}/full#s-${seg.id}`}>於通讀中查看</a>
+          {originalUrl && <a href={originalUrl} target="_blank" rel="noopener">於太虛間查看原文 ↗</a>}
         </div>
       </header>
 
@@ -292,8 +295,8 @@ const partSegs = data.parts.map((part) => ({
                   {q.note && <span class="nc-note">{q.note}</span>}
                   {(ref || q.taixu) && (
                     <span class="nc-links">
-                      {ref && <a class="src-link" href={cbetaUrl(ref)} target="_blank" rel="noopener">CBETA 原文 ↗</a>}
-                      {q.taixu && <a class="src-link" href={taixuUrl(q.taixu)} target="_blank" rel="noopener">太虛間 ↗</a>}
+                      {q.taixu && <a class="src-link primary" href={taixuUrl(q.taixu, q.taixu_hl)} target="_blank" rel="noopener">太虛間原文 ↗</a>}
+                      {ref && <a class="src-link" href={cbetaUrl(ref)} target="_blank" rel="noopener">CBETA ↗</a>}
                     </span>
                   )}
                 </div>
