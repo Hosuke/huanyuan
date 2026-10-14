@@ -1414,9 +1414,19 @@ main {
 
 .tab-panel .notes,
 .tab-panel .notes-structured,
-.tab-panel .translation-panel {
+.tab-panel .translation-panel,
+.lecture-body {
   font-family: var(--kai);
   line-height: 2;
+}
+
+.lecture-body {
+  font-size: calc(1rem * var(--text-scale));
+}
+
+.lecture-body p {
+  text-indent: 2em;
+  margin: 0 0 1em;
 }
 
 .tab-panel .notes {
@@ -1440,6 +1450,12 @@ main {
   background: var(--bg-raised);
   border: 1px solid var(--line-soft);
   color: var(--ink);
+}
+
+.lecture-links {
+  margin: 0 0 1rem;
+  color: var(--ink-2);
+  font-size: 0.85rem;
 }
 
 .points {

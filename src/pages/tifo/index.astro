@@ -1,0 +1,75 @@
+---
+import Base from '../../layouts/Base.astro';
+import { base, getSegment, shortTitle } from '../../lib/data';
+import { lectures } from '../../lib/lectures';
+
+const description = '《修華嚴奧旨妄盡還源觀》體佛法師講義，全 36 節，經授權刊載。講於臺灣賢首禪苑，影音見 YouTube「賢首禪苑」頻道。';
+const entries = lectures.map((lecture) => ({
+  ...lecture,
+  wordCount: Array.from(lecture.paragraphs.join('').replace(/\s/gu, '')).length,
+  sections: lecture.segments.map((id) => ({ id, segment: getSegment(id) })),
+}));
+---
+
+<Base title="體佛法師講義" description={description}>
+  <header class="page-head">
+    <h1>體佛法師講義</h1>
+    <p>{description}</p>
+  </header>
+
+  <ol class="lecture-list">
+    {entries.map((lecture) => (
+      <li>
+        <div class="lecture-title">
+          <a href={`${base}/tifo/${String(lecture.episode).padStart(2, '0')}`}>第 {lecture.episode} 集</a>
+          <span class="word-count">{lecture.wordCount.toLocaleString('zh-TW')} 字</span>
+        </div>
+        <p class="lecture-segments">
+          {lecture.sections.map(({ id, segment }, i) => (
+            <>{i > 0 && '、'}<a href={`${base}/read/${id}#tifo`}>{segment ? shortTitle(segment) : id}</a></>
+          ))}
+        </p>
+      </li>
+    ))}
+  </ol>
+</Base>
+
+<style>
+  .lecture-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lecture-list li {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .lecture-title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .lecture-title > a {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .word-count {
+    color: var(--ink-3);
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .lecture-segments {
+    margin: 0.3rem 0 0;
+    font-size: 0.9rem;
+  }
+
+  .lecture-segments a {
+    color: var(--ink-2);
+  }
+</style>

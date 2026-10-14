@@ -27,7 +27,6 @@ export interface Segment {
   commentaries: {
     tifo: Commentary;
     jingkong: Commentary;
-    mengcan: Commentary;
   };
   quotes: string[];
   terms: string[];
@@ -187,7 +186,6 @@ export const gates: Gate[] = [
 export const commentaryMeta = [
   { key: 'tifo', label: '體佛法師' },
   { key: 'jingkong', label: '淨空法師' },
-  { key: 'mengcan', label: '夢參法師' },
 ] as const;
 
 export const PREFS_STORAGE_KEY = 'wjhy-prefs';

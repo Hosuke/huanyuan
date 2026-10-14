@@ -98,7 +98,6 @@ def main():
             "commentaries": {
                 "tifo": {"status": "pending", "episodes": [], "notes": ""},
                 "jingkong": {"status": "pending", "episodes": [], "notes": ""},
-                "mengcan": {"status": "pending", "episodes": [], "notes": ""},
             },
             "quotes": [],
             "terms": [],

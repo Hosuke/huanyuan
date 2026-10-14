@@ -103,7 +103,6 @@ function episodesLabel(key: string, eps: string[]): string {
 const pendingNote: Record<string, string> = {
   tifo: '體佛法師講義未講此段（宋淨源後序不在講述範圍）。',
   jingkong: '本段淨空法師講記摘要整理中。',
-  mengcan: '夢參老和尚未見本觀專講講記，擬以相關開示摘錄補入，整理中。',
 };
 
 const voices = commentaryMeta.map(({ key, label }) => {
@@ -221,6 +220,14 @@ const partSegs = data.parts.map((part) => ({
               : (
                 <>
                   {v.c.episodes.length > 0 && <p class="eps">出處：{episodesLabel(v.key, v.c.episodes)}</p>}
+                  {v.key === 'tifo' && v.c.episodes.length > 0 && (
+                    <p class="lecture-links">
+                      講義原文：{v.c.episodes.map((episode, i) => {
+                        const n = Number.parseInt(episode.replace(/^tifo-/, ''), 10);
+                        return <>{i > 0 && '、'}<a href={`${base}/tifo/${String(n).padStart(2, '0')}`}>第 {n} 集</a></>;
+                      })}
+                    </p>
+                  )}
                   {v.parsed
                     ? (
                       <div class="notes-structured">

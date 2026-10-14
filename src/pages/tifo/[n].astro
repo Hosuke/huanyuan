@@ -1,0 +1,75 @@
+---
+import Base from '../../layouts/Base.astro';
+import { base, getSegment, shortTitle } from '../../lib/data';
+import { getLecture, lectures, lectureVideoIds, type Lecture } from '../../lib/lectures';
+
+export function getStaticPaths() {
+  return lectures.map((lecture) => ({
+    params: { n: String(lecture.episode).padStart(2, '0') },
+    props: { lecture },
+  }));
+}
+
+interface Props {
+  lecture: Lecture;
+}
+
+const { lecture } = Astro.props;
+const prev = getLecture(lecture.episode - 1);
+const next = getLecture(lecture.episode + 1);
+const title = `體佛法師講義・第 ${lecture.episode} 集`;
+const sections = lecture.segments.map((id) => ({ id, segment: getSegment(id) }));
+const lectureHref = (episode: number) => `${base}/tifo/${String(episode).padStart(2, '0')}`;
+---
+
+<Base title={title} description={`《修華嚴奧旨妄盡還源觀》${title}，經授權刊載全文。`}>
+  <nav class="lecture-nav" aria-label="頁首講義導覽">
+    <span>{prev && <a href={lectureHref(prev.episode)} rel="prev">← 第 {prev.episode} 集</a>}</span>
+    <a href={`${base}/tifo`}>講義總目</a>
+    <span>{next && <a href={lectureHref(next.episode)} rel="next">第 {next.episode} 集 →</a>}</span>
+  </nav>
+
+  <article>
+    <header class="page-head">
+      <h1>{title}</h1>
+      <p>
+        本集涉及段落：
+        {sections.map(({ id, segment }, i) => (
+          <>{i > 0 && '、'}<a href={`${base}/read/${id}#tifo`}>{segment ? shortTitle(segment) : id}</a></>
+        ))}
+      </p>
+      <p><a href={`https://www.youtube.com/watch?v=${lectureVideoIds[lecture.episode]}`} target="_blank" rel="noopener">賢首禪苑影音 ↗</a></p>
+    </header>
+
+    <div class="lecture-body">
+      {lecture.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+  </article>
+
+  <nav class="lecture-nav lecture-nav-footer" aria-label="頁尾講義導覽">
+    <span>{prev && <a href={lectureHref(prev.episode)} rel="prev">← 第 {prev.episode} 集</a>}</span>
+    <a href={`${base}/tifo`}>講義總目</a>
+    <span>{next && <a href={lectureHref(next.episode)} rel="next">第 {next.episode} 集 →</a>}</span>
+  </nav>
+</Base>
+
+<style>
+  .lecture-nav {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .lecture-nav > :last-child {
+    text-align: right;
+  }
+
+  .lecture-nav-footer {
+    margin: 2rem 0 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+</style>
