@@ -1638,6 +1638,39 @@ main {
   color: var(--ink-2);
 }
 
+.note-card .nc-src {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--ink-3);
+  margin-top: 0.25rem;
+}
+
+.note-card .nc-note {
+  display: block;
+  font-size: 0.74rem;
+  color: var(--ink-2);
+  margin-top: 0.25rem;
+  line-height: 1.65;
+}
+
+.note-card .nc-links,
+.pop-links {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.35rem;
+  font-size: 0.74rem;
+}
+
+.src-link {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.src-link:hover {
+  text-decoration: underline;
+}
+
 .note-card.term .nc-title {
   color: var(--jade);
 }
@@ -1692,6 +1725,20 @@ main {
 
 .pop p {
   margin: 0;
+  color: var(--ink-2);
+}
+
+.pop .pop-src,
+.pop .pop-note {
+  font-size: 0.78rem;
+  margin: 0.35rem 0 0;
+}
+
+.pop .pop-src {
+  color: var(--ink-3);
+}
+
+.pop .pop-note {
   color: var(--ink-2);
 }
 

@@ -3,8 +3,10 @@ import Base from '../../layouts/Base.astro';
 import AnnotatedText from '../../components/AnnotatedText.astro';
 import {
   base,
+  cbetaUrl,
   commentaryMeta,
   data,
+  formatCbetaRef,
   formatEpisodes,
   formatLb,
   gates,
@@ -12,6 +14,7 @@ import {
   quotesBySegment,
   segments,
   shortTitle,
+  taixuUrl,
   termsBySegment,
   variantsBySegment,
   type Commentary,
@@ -37,7 +40,7 @@ interface Props {
 
 const { seg, prev, next } = Astro.props as Props;
 const gate = gates.find((g) => g.part === seg.part);
-const quotes = quotesBySegment(seg.id).filter((q) => q.quote);
+const quotes = quotesBySegment(seg.id);
 const terms = termsBySegment(seg.id);
 const variants = variantsBySegment(seg.id);
 const plain = plainText(seg);
@@ -266,15 +269,33 @@ const partSegs = data.parts.map((part) => ({
           <section class="margin-sec">
             <h2>徵引</h2>
             {quotes.map((q) => {
-              const identified = [q.identified.canon, q.identified.juan, q.identified.pin, q.identified.cbeta_ref].filter(Boolean);
+              const identified = [q.identified.juan, q.identified.pin].filter(Boolean);
+              const statusLabel = {
+                identified: '',
+                paraphrase: '・義引',
+                unlocated: '・原典未詳',
+                general: '・泛指',
+                pending: '・出處待考',
+              }[q.status];
+              const ref = q.identified.cbeta_ref;
+              const showQuote = q.quote && !(q.status === 'general' && q.quote === '也');
               return (
                 <div class="note-card quote" id={`n-quote-${q.id}`} data-card-quote={q.id} tabindex="0">
                   <span class="nc-title">《{q.work}》</span>
                   <span class="nc-sub">
                     {q.cited_as !== q.work ? `文中稱「${q.cited_as}」` : '文中直引'}
-                    {identified.length > 0 ? `・${identified.join('・')}` : '・出處待考'}
+                    {statusLabel}
+                    {identified.length > 0 ? `・${identified.join('・')}` : ''}
                   </span>
-                  <span class="nc-body">{q.quote.length > 60 ? `${q.quote.slice(0, 60)}……` : q.quote}</span>
+                  {showQuote && <span class="nc-body">{q.quote.length > 60 ? `${q.quote.slice(0, 60)}……` : q.quote}</span>}
+                  {ref && <span class="nc-src">{q.identified.canon}{q.identified.juan}・{formatCbetaRef(ref)}</span>}
+                  {q.note && <span class="nc-note">{q.note}</span>}
+                  {(ref || q.taixu) && (
+                    <span class="nc-links">
+                      {ref && <a class="src-link" href={cbetaUrl(ref)} target="_blank" rel="noopener">CBETA 原文 ↗</a>}
+                      {q.taixu && <a class="src-link" href={taixuUrl(q.taixu)} target="_blank" rel="noopener">太虛間 ↗</a>}
+                    </span>
+                  )}
                 </div>
               );
             })}

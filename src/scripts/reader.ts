@@ -146,6 +146,23 @@ if (reader) {
       p.textContent = body.textContent;
       popBody.append(p);
     }
+    if (key.kind === 'quote') {
+      for (const field of ['src', 'note']) {
+        const text = card.querySelector(`.nc-${field}`)?.textContent?.trim();
+        if (!text) continue;
+        const p = document.createElement('p');
+        p.className = `pop-${field}`;
+        p.textContent = text;
+        popBody.append(p);
+      }
+      const sourceLinks = card.querySelectorAll<HTMLAnchorElement>('a.src-link');
+      if (sourceLinks.length > 0) {
+        const links = document.createElement('div');
+        links.className = 'pop-links';
+        sourceLinks.forEach((link) => links.append(link.cloneNode(true)));
+        popBody.append(links);
+      }
+    }
     const link = card.querySelector<HTMLAnchorElement>('.pop-link');
     if (link) {
       const a = link.cloneNode(true) as HTMLAnchorElement;

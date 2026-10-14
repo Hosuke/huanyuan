@@ -61,7 +61,21 @@ export interface Quote {
     pin: string;
     cbeta_ref: string;
   };
-  status: string;
+  status: 'pending' | 'identified' | 'paraphrase' | 'unlocated' | 'general';
+  note?: string;
+  taixu?: string;
+}
+
+export function cbetaUrl(ref: string): string {
+  return `https://cbetaonline.dila.edu.tw/zh/${ref}`;
+}
+
+export function taixuUrl(slug: string): string {
+  return `https://taixu.ink/classics/${encodeURIComponent(slug)}/`;
+}
+
+export function formatCbetaRef(ref: string): string {
+  return ref.replace('_', ', ');
 }
 
 export interface Variant {
